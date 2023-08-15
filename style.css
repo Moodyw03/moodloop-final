@@ -93,3 +93,17 @@ body {
     transform: translate(-50%);
     box-shadow: 0px 0px 2px inset;
   }
+  .label-l {
+    left: -20%;
+  }
+  
+  .label-r {
+    right: -20%;
+  }
+  
+  .label {
+    position: absolute;
+    font-size: 16px;
+    top: 100%;
+    user-select: none;
+  }
