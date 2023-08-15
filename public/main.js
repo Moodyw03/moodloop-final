@@ -294,3 +294,8 @@ function muteTheAudio(event) {
     eqSettings[list].mid = mid;
     eqSettings[list].treble = treble;
   }
+  function setEQValues(list, bassGain, midGain, trebleGain) {
+    eqSettings[list].bass.gain.value = bassGain;
+    eqSettings[list].mid.gain.value = midGain;
+    eqSettings[list].treble.gain.value = trebleGain;
+  }
