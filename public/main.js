@@ -323,4 +323,16 @@ document.getElementById("bass").addEventListener("input", function (event) {
       }
     });
   });
+  document.getElementById("treble").addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("trebleValue").textContent = `${value} dB`;
+  
+    // Adjust the EQ for each list
+    ["rhythm", "bass", "percussion", "synth"].forEach((list) => {
+      if (eqSettings[list].treble) {
+        eqSettings[list].treble.gain.value = value;
+      }
+    });
+  });
+  
   
