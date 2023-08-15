@@ -182,3 +182,8 @@ function pauseAudio(list) {
         gainNode.connect(context.destination);
         currentlyPlaying[list].gainNode = gainNode;
       }
+      // If no track has started yet, start this one at time 0
+    if (firstStartTime === null) {
+        firstStartTime = context.currentTime;
+      }
+  
