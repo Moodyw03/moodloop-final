@@ -209,4 +209,15 @@ function muteAudio(list) {
       }
     }
   }
+  // SOLO
+
+// Global audio player object
+let audioPlayer = null;
+
+function playSolo(event) {
+  // Stop the current audio if it is playing
+  if (audioPlayer) {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+  }
   
