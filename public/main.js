@@ -165,3 +165,20 @@ function pauseAudio(list) {
       currentlyPlaying[list].source = null; // Here set the source to null instead of the entire object
     }
   }
+  function resumeAudio(list) {
+    if (paused[list]) {
+      // If the audio is paused, start it from the pause time
+      let source = context.createBufferSource();
+      source.buffer = audioBuffers[list];
+      source.loop = true;
+  
+      // If there's already a gainNode for this list, connect the source to the existing gainNode
+      if (currentlyPlaying[list].gainNode) {
+        source.connect(currentlyPlaying[list].gainNode);
+      } else {
+        // Otherwise, create a new gainNode and connect the source to it
+        let gainNode = context.createGain();
+        source.connect(gainNode);
+        gainNode.connect(context.destination);
+        currentlyPlaying[list].gainNode = gainNode;
+      }
