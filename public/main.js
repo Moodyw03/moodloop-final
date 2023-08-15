@@ -250,3 +250,13 @@ let audioSource = container.attr("data-audio");
  resumeAudio("synth");
 }
 }
+// function pauseAudio() {
+//   if (audioPlayer) audioPlayer.pause();
+// }
+
+// function stopAudio() {
+//   if (audioPlayer) {
+//     audioPlayer.pause();
+//     audioPlayer.currentTime = 0;
+//   }
+// }
