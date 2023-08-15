@@ -79,3 +79,10 @@ function drag(event) {
     });
   }
 }
+$(function () {
+    var dropZone = $("#drop_zone");
+  
+    dropZone.on("dragover dragenter", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    });
