@@ -205,4 +205,18 @@ body {
       width: 100%;
     }
   }
+/* Media Queries
+    ================================================== */
+
+    @media only screen and (max-width: 600px) {
+        #nowPlay span#npAction {
+          display: none;
+        }
+        #nowPlay span#npTitle {
+          display: block;
+          text-align: center;
+          width: 100%;
+        }
+      }
+      
   
