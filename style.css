@@ -114,3 +114,16 @@ body {
     user-select: none;
     font-weight: 700;
   }
+  .current-value {
+    position: relative;
+    top: 36px;
+    width: 100px;
+    border-radius: 8px;
+    margin: auto;
+    text-align: center;
+    font-size: 32px;
+    user-select: none;
+    font-weight: 700;
+    padding: 5px;
+    background-color: rgb(238, 221, 190);
+  }
