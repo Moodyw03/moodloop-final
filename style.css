@@ -149,3 +149,7 @@ body {
     background-color: transparent;
     color: #fcfdff;
   }
+  .fileName {
+    width: 50%;
+    margin-top: 10px;
+  }
