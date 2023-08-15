@@ -117,3 +117,15 @@ $(function () {
   // Add the "selected" class to the selected file
   $(`div[data-audio='${url}']`).addClass("selected");
 }
+function playAudio(list) {
+    let source = context.createBufferSource();
+    source.buffer = audioBuffers[list];
+    source.loop = true;
+  
+    let gainNode = context.createGain(); // Create a gain node
+    source.connect(gainNode); // Connect the source to the gain node
+    gainNode.connect(context.destination); // Connect the gain node to the destination
+  
+    if (firstStartTime === null) {
+      firstStartTime = context.currentTime;
+    }
