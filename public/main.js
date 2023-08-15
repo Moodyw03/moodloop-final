@@ -142,3 +142,9 @@ function playAudio(list) {
   if (!eqSettings[list].bass) {
     createEQ(list);
   }
+  // Connect the source to the EQ and then to the gain node
+  source.connect(eqSettings[list].bass);
+  eqSettings[list].bass.connect(eqSettings[list].mid);
+  eqSettings[list].mid.connect(eqSettings[list].treble);
+  eqSettings[list].treble.connect(currentlyPlaying[list].gainNode);
+}
