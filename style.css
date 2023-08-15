@@ -50,3 +50,9 @@ body {
     color: #fcfdff;
     width: 100%;
   }
+  .navbar-brand img {
+    width: 200px;
+    position: absolute;
+    top: 10%;
+    left: 13%;
+  }
