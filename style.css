@@ -179,4 +179,9 @@ body {
 .boxsynth h3 {
   margin-left: 20px;
 }
+.boxpercussion {
+    background-image: url("../332279.png");
+    border: 1px solid;
+    color: #fcfdff;
+  }
   
