@@ -56,3 +56,12 @@ body {
     top: 10%;
     left: 13%;
   }
+  .mainbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .wrapper {
+    margin: 30px;
+  }
