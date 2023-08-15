@@ -12,3 +12,30 @@ const eqSettings = {
     percussion: { bass: null, mid: null, treble: null },
     synth: { bass: null, mid: null, treble: null },
   };
+  let currentListOfAudioInDZ = {
+    rhythm: null,
+    bass: null,
+    percussion: null,
+    synth: null,
+  };
+  
+  let paused = {
+    rhythm: false,
+    bass: false,
+    percussion: false,
+    synth: false,
+  };
+  
+  let pauseTime = {
+    rhythm: 0,
+    bass: 0,
+    percussion: 0,
+    synth: 0,
+  };
+  
+  let isMuted = {
+    rhythm: false,
+    bass: false,
+    percussion: false,
+    synth: false,
+  };
