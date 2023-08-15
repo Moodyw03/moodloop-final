@@ -230,3 +230,6 @@ function playSolo(event) {
 // Get the container element and its data
 let container = $(event.target).closest(".draggableContainer");
 let audioSource = container.attr("data-audio");
+ // Create a new audio player and start playing the audio
+ audioPlayer = new Audio(audioSource);
+ audioPlayer.play();
