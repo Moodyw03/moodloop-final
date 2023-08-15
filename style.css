@@ -107,3 +107,10 @@ body {
     top: 100%;
     user-select: none;
   }
+  .instructions {
+    position: relative;
+    top: 48px;
+    font-size: 16px;
+    user-select: none;
+    font-weight: 700;
+  }
