@@ -108,3 +108,12 @@ $(function () {
     let response = await fetch(url);
     let arrayBuffer = await response.arrayBuffer();
     let audioData = await context.decodeAudioData(arrayBuffer);
+    audioBuffers[list] = audioData;
+  currentListOfAudioInDZ[list] = url;
+
+  // Remove the "selected" class from all files
+  $(".draggableContainer").removeClass("selected");
+
+  // Add the "selected" class to the selected file
+  $(`div[data-audio='${url}']`).addClass("selected");
+}
