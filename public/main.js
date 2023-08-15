@@ -129,3 +129,16 @@ function playAudio(list) {
     if (firstStartTime === null) {
       firstStartTime = context.currentTime;
     }
+    //source.start(0, context.currentTime - firstStartTime);
+
+  const loopDuration = source.buffer.duration;
+  const offset = (context.currentTime - firstStartTime) % loopDuration;
+  source.start(0, offset);
+
+  currentlyPlaying[list].source = source;
+  currentlyPlaying[list].gainNode = gainNode; // Save the gain node
+
+  // Check if the EQ settings for this list exist
+  if (!eqSettings[list].bass) {
+    createEQ(list);
+  }
