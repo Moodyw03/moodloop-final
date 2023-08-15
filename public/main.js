@@ -312,3 +312,15 @@ document.getElementById("bass").addEventListener("input", function (event) {
       }
     });
   });
+  document.getElementById("mid").addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("midValue").textContent = `${value} dB`;
+  
+    // Adjust the EQ for each list
+    ["rhythm", "bass", "percussion", "synth"].forEach((list) => {
+      if (eqSettings[list].mid) {
+        eqSettings[list].mid.gain.value = value;
+      }
+    });
+  });
+  
