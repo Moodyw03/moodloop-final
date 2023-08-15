@@ -186,4 +186,16 @@ function pauseAudio(list) {
     if (firstStartTime === null) {
         firstStartTime = context.currentTime;
       }
+      // Calculate the offset based on the pause time and the first start time
+    let offset = pauseTime[list] - (firstStartTime - context.currentTime);
+
+    // Start the audio from the pause time
+    source.start(0, offset);
+
+    // Reset the pause state
+    paused[list] = false;
+    pauseTime[list] = 0;
+    currentlyPlaying[list].source = source;
+  }
+}
   
