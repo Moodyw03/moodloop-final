@@ -104,3 +104,7 @@ $(function () {
       }
     });
   });
+  async function loadAudio(url, list) {
+    let response = await fetch(url);
+    let arrayBuffer = await response.arrayBuffer();
+    let audioData = await context.decodeAudioData(arrayBuffer);
