@@ -157,4 +157,10 @@ body {
     width: 50%;
     text-align: right;
   }
+  .audiofile {
+    /* background-color: rgba(240, 255, 255, 0.026); */
+    border: #b3bac8;
+    height: 300px;
+    overflow-y: scroll;
+  }
   
