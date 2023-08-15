@@ -173,4 +173,10 @@ body {
     border: 1px solid;
     color: #fcfdff;
   }
+  .boxrhythm h3,
+.boxbass h3,
+.boxpercussion h3,
+.boxsynth h3 {
+  margin-left: 20px;
+}
   
