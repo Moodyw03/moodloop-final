@@ -39,3 +39,8 @@ const eqSettings = {
     percussion: false,
     synth: false,
   };
+  let audioBuffers = {};
+let firstStartTime = null;
+
+let list;
+let isSolo = false;
