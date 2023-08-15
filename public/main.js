@@ -58,3 +58,7 @@ function drag(event) {
     const controlsDiv = event.target.getElementsByClassName("controls");
     controlsDiv[0].style.display = "none";
   }
+  function endDrag(event) {
+    const controlsDiv = event.target.getElementsByClassName("controls");
+    controlsDiv[0].style.display = "";
+  }
