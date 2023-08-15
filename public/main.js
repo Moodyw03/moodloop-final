@@ -158,3 +158,10 @@ function pauseAudio(list) {
       currentlyPlaying[list].source = null; // Here set the source to null instead of the entire object
     }
   }
+  function stopAudio(list) {
+    // Check if the audio is playing and if source exists
+    if (currentlyPlaying[list] && currentlyPlaying[list].source) {
+      currentlyPlaying[list].source.stop();
+      currentlyPlaying[list].source = null; // Here set the source to null instead of the entire object
+    }
+  }
