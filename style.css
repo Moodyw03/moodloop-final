@@ -142,3 +142,10 @@ body {
     align-items: center;
     justify-content: space-between;
   }
+  .controls button {
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    background-color: transparent;
+    color: #fcfdff;
+  }
