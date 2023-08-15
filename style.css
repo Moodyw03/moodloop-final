@@ -189,4 +189,7 @@ body {
     border: 1px solid;
     color: #fcfdff;
   }
+  .selected .fileName {
+    color: rgb(248, 248, 71);
+  }
   
