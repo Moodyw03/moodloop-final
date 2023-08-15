@@ -68,3 +68,14 @@ function drag(event) {
       src: container.dataset.audio,
       list: container.dataset.list,
     };
+    // Mimic the behavior of your drop event handler
+  if (currentlyPlaying[data.list].source) {
+    currentlyPlaying[data.list].source.stop();
+  }
+
+  if (data.src) {
+    loadAudio(data.src, data.list).then(() => {
+      playAudio(data.list);
+    });
+  }
+}
