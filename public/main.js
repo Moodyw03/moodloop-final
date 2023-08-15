@@ -236,3 +236,17 @@ let audioSource = container.attr("data-audio");
 
  // Remove any existing audio controls
  $("#audio_controls").empty();
+ // Add new controls to the audio_controls div
+ let controlsHtml = ``;
+ $("#audio_controls").append(controlsHtml);
+} else {
+ isSolo = false;
+ // Pause the dropzone
+ $("#audio_controls").empty();
+
+ resumeAudio("rhythm");
+ resumeAudio("bass");
+ resumeAudio("percussion");
+ resumeAudio("synth");
+}
+}
