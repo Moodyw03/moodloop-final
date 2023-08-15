@@ -44,3 +44,17 @@ let firstStartTime = null;
 
 let list;
 let isSolo = false;
+
+// WHEN DRAGGING START
+function drag(event) {
+    event.dataTransfer.setData(
+      "text",
+      JSON.stringify({
+        src: event.target.dataset.audio,
+        list: event.target.dataset.list,
+      })
+    );
+  
+    const controlsDiv = event.target.getElementsByClassName("controls");
+    controlsDiv[0].style.display = "none";
+  }
