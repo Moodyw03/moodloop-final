@@ -260,3 +260,12 @@ let audioSource = container.attr("data-audio");
 //     audioPlayer.currentTime = 0;
 //   }
 // }
+
+function muteTheAudio(event) {
+    // Get the container element and its data
+    let container = $(event.target).closest(".draggableContainer");
+    let list = container.attr("data-list");
+  
+    // Call the muteAudio function with the list value
+    muteAudio(list);
+  }
