@@ -93,3 +93,14 @@ $(function () {
         var data = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
         var file = data.src;
         list = data.list;
+
+    if (currentlyPlaying[list].source) {
+        currentlyPlaying[list].source.stop();
+      }
+  
+      if (file) {
+        await loadAudio(file, list);
+        playAudio(list);
+      }
+    });
+  });
