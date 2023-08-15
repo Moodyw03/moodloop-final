@@ -198,4 +198,15 @@ function pauseAudio(list) {
     currentlyPlaying[list].source = source;
   }
 }
+function muteAudio(list) {
+    if (currentlyPlaying[list]?.source) {
+      if (!isMuted[list]) {
+        currentlyPlaying[list].gainNode.gain.value = 0; // Mute the audio
+        isMuted[list] = true;
+      } else {
+        currentlyPlaying[list].gainNode.gain.value = 1; // Unmute the audio
+        isMuted[list] = false;
+      }
+    }
+  }
   
