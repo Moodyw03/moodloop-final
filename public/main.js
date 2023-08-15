@@ -233,3 +233,6 @@ let audioSource = container.attr("data-audio");
  // Create a new audio player and start playing the audio
  audioPlayer = new Audio(audioSource);
  audioPlayer.play();
+
+ // Remove any existing audio controls
+ $("#audio_controls").empty();
