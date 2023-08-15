@@ -6,3 +6,9 @@ let currentlyPlaying = {
   percussion: { source: null, gainNode: null },
   synth: { source: null, gainNode: null },
 };
+const eqSettings = {
+    rhythm: { bass: null, mid: null, treble: null },
+    bass: { bass: null, mid: null, treble: null },
+    percussion: { bass: null, mid: null, treble: null },
+    synth: { bass: null, mid: null, treble: null },
+  };
