@@ -220,4 +220,10 @@ function playSolo(event) {
     audioPlayer.pause();
     audioPlayer.currentTime = 0;
   }
-  
+  if (!isSolo) {
+    isSolo = true;
+    // Pause the dropzone
+    pauseAudio("rhythm");
+    pauseAudio("bass");
+    pauseAudio("percussion");
+    pauseAudio("synth");
