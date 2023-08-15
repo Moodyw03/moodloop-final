@@ -299,3 +299,16 @@ function muteTheAudio(event) {
     eqSettings[list].mid.gain.value = midGain;
     eqSettings[list].treble.gain.value = trebleGain;
   }
+  // Add event listeners for each slider
+
+document.getElementById("bass").addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("bassValue").textContent = `${value} dB`;
+  
+    // Adjust the EQ for each list
+    ["rhythm", "bass", "percussion", "synth"].forEach((list) => {
+      if (eqSettings[list].bass) {
+        eqSettings[list].bass.gain.value = value;
+      }
+    });
+  });
