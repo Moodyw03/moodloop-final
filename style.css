@@ -25,3 +25,13 @@ body {
       background-position: 0% 0%;
     }
   }
+  #drop_zone {
+    height: 200px;
+    width: 200px;
+    border: 1px solid white;
+    color: wheat;
+    border-radius: 50%;
+    line-height: 200px;
+    text-align: center;
+    margin: 100px auto 0 auto;
+  }
