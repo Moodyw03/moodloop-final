@@ -62,3 +62,9 @@ function drag(event) {
     const controlsDiv = event.target.getElementsByClassName("controls");
     controlsDiv[0].style.display = "";
   }
+  function simulateDragToDropzone(event) {
+    const container = event.target.closest(".draggableContainer");
+    const data = {
+      src: container.dataset.audio,
+      list: container.dataset.list,
+    };
