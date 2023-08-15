@@ -86,3 +86,10 @@ $(function () {
       e.preventDefault();
       e.stopPropagation();
     });
+    dropZone.on("drop", async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    
+        var data = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+        var file = data.src;
+        list = data.list;
