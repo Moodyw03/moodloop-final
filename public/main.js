@@ -269,3 +269,10 @@ function muteTheAudio(event) {
     // Call the muteAudio function with the list value
     muteAudio(list);
   }
+  function stopTheAudio() {
+    // Call the stopAudio function with the list value
+    stopAudio("rhythm");
+    stopAudio("bass");
+    stopAudio("percussion");
+    stopAudio("synth");
+  }
