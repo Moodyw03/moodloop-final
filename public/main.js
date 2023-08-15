@@ -276,3 +276,21 @@ function muteTheAudio(event) {
     stopAudio("percussion");
     stopAudio("synth");
   }
+  function createEQ(list) {
+    const bass = context.createBiquadFilter();
+    const mid = context.createBiquadFilter();
+    const treble = context.createBiquadFilter();
+  
+    bass.type = "lowshelf";
+    bass.frequency.value = 100;
+  
+    mid.type = "peaking";
+    mid.frequency.value = 1000;
+  
+    treble.type = "highshelf";
+    treble.frequency.value = 5000;
+  
+    eqSettings[list].bass = bass;
+    eqSettings[list].mid = mid;
+    eqSettings[list].treble = treble;
+  }
