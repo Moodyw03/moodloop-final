@@ -227,3 +227,6 @@ function playSolo(event) {
     pauseAudio("bass");
     pauseAudio("percussion");
     pauseAudio("synth");
+// Get the container element and its data
+let container = $(event.target).closest(".draggableContainer");
+let audioSource = container.attr("data-audio");
