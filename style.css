@@ -127,3 +127,8 @@ body {
     padding: 5px;
     background-color: rgb(238, 221, 190);
   }
+  .logo img {
+    width: 300px;
+    margin: auto;
+    display: block;
+  }
