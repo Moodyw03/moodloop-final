@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap");
+body {
+  margin: auto;
+  font-family: "Roboto Mono", monospace;
+  overflow: auto;
+  background: linear-gradient(
+    351deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgb(103, 103, 222) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+
+  background-size: 400% 400%;
+  background-attachment: fixed;
+  animation: gradient 15s ease infinite;
+}
