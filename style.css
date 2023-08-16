@@ -285,6 +285,9 @@ body {
 
 /* Media Queries
 ================================================== */
+@media only screen and (max-width: 1024px) {
+  
+}
 @media only screen and (max-width: 992px) {
   .testy {
     display: inline-block;
@@ -294,6 +297,9 @@ body {
   }
   .foot {
     width: 50%;
+  }
+  .boxrhythm, .boxbass, .boxpercussion, .boxsynth {
+    margin: 5px 0px;
   }
 }
 @media only screen and (max-width: 600px) {
