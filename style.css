@@ -236,16 +236,32 @@ body {
   font-size: 10px;
   }
   
+  
   input[type=email] {
     width: 65%;
     padding: 5px 0px;
     font-size: 10px;
+    color: #fdfdff;
+    background-color: #272d3644;
+    border: none;
   }
+  input[type=email]::placeholder {
+    
+    color: #fdfdff;
+    
+  }
+ 
+
+
+  
   input[type=submit] {
     width: 30%;
     padding: 5px 0px;
     font-size: 10px;
     margin-left: -10px;
+    background-color: #272d3644;
+    color: #fcfdff;
+    border: none;
   }
   .social {
     display: flex;
