@@ -268,8 +268,9 @@ body {
     align-items: center;
 
   }
-  .social i {
+  .social a {
     margin: 0px 5px;
+    color: #fcfdff;
   }
   .foot {
    width: 30%;
