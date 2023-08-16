@@ -285,13 +285,34 @@ body {
 
 /* Media Queries
 ================================================== */
+@media only screen and (max-width: 1366px) {
+ 
+  .testy {
+    display: inline-block;
+  }
+  .boom .col{
+width: 50%;
+  }
+  .boxrhythm, .boxbass, .boxpercussion, .boxsynth {
+    margin: 5px 0px;
+  }
+}
 @media only screen and (max-width: 1024px) {
-  
+  #drop_zone {
+    margin-top: 150px;
+    
+  }
+  .testy {
+    display: inline-block;
+  }
 }
 @media only screen and (max-width: 992px) {
   .testy {
     display: inline-block;
   }
+  .boom .col{
+    width: 100%;
+      }
   #drop_zone {
     margin-top: 150px;
   }
@@ -311,21 +332,27 @@ body {
     text-align: center;
     width: 100%;
   }
+  #textbox {
+    display: none;
+}
+.navbar-brand {
+  position: relative;
+  margin: 0;
+}
+
+.navbar-brand img {
+ position: absolute;
+ top: 20px;
+ left: 50%;
+ transform: translateX(-50%);
+ margin: 0;
+}
+
 }
 
 /* Media Queries
     ================================================== */
 
-@media only screen and (max-width: 600px) {
-  #nowPlay span#npAction {
-    display: none;
-  }
-  #nowPlay span#npTitle {
-    display: block;
-    text-align: center;
-    width: 100%;
-  }
-}
 
 @media screen and (min-width: 420px) {
   /* .vz-wrapper { box-shadow: inset 0 0 200px 60px #000; } */
