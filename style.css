@@ -289,6 +289,12 @@ body {
   .testy {
     display: inline-block;
   }
+  #drop_zone {
+    margin-top: 150px;
+  }
+  .foot {
+    width: 50%;
+  }
 }
 @media only screen and (max-width: 600px) {
   #nowPlay span#npAction {
