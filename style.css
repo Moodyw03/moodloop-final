@@ -35,7 +35,7 @@ body {
   border-radius: 50%;
   line-height: 200px;
   text-align: center;
-  margin: 100px auto 0 auto;
+  margin: 50px auto 0 auto;
 }
 
 html,
@@ -78,7 +78,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 .wrapper button{
   font-size: 10px;
@@ -229,7 +229,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding:50px;
+  padding: 40px;
  
 }
 .footermood h2 {
@@ -237,18 +237,28 @@ body {
   }
   
   input[type=email] {
-    width: 50%;
+    width: 65%;
     padding: 5px 0px;
     font-size: 10px;
   }
   input[type=submit] {
-    width: 40%;
+    width: 30%;
     padding: 5px 0px;
     font-size: 10px;
+    margin-left: -10px;
   }
   .social {
     display: flex;
     align-items: center;
+
+  }
+  .social i {
+    margin: 0px 5px;
+  }
+  .foot {
+   width: 30%;
+   margin-left: 70px;
+
   }
 
 /* Media Queries
