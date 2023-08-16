@@ -55,11 +55,23 @@ body {
   color: #fcfdff;
   width: 100%;
 }
+.navbar {
+  position: relative;
+
+}
 .navbar-brand img {
   width: 200px;
   position: absolute;
   top: 10%;
   left: 13%;
+}
+#textbox {
+  color: #fcfdff;
+  width: 400px;
+  position: absolute;
+  top: 60px;
+  right: 10%;
+  padding: 10px;
 }
 
 .mainbox {
@@ -68,8 +80,14 @@ body {
   justify-content: center;
   margin-top: 20px;
 }
-.wrapper {
+.wrapper button{
+  font-size: 10px;
   margin: 30px;
+  width: 80px;
+  height: 80px;
+  background-color: rgb(32, 45, 219);
+  border-radius: 50%;
+  color: #fcfdff;
 }
 
 .knob {
@@ -241,4 +259,5 @@ body {
 
 #eqControls {
   color: #fcfdff;
+  margin-left: 25px;
 }
