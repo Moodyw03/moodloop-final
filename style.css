@@ -373,7 +373,7 @@ width: 50%;
   display: flex;
  
 }
-.draggableContainer {
+/*.draggableContainer {
   width: 100%;
   height: auto;
   border: 2px solid #000;
@@ -392,7 +392,7 @@ width: 50%;
   width: 100%;
   text-align: center;
 }
-
+*/
 
 
 }
