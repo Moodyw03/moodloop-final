@@ -232,7 +232,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 5px;
- 
+ margin-left: 40px;
 }
 .footermood h2 {
   font-size: 10px;
