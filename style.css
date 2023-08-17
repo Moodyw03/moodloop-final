@@ -67,11 +67,12 @@ body {
 }
 #textbox {
   color: #fcfdff;
-  width: 400px;
+  width: 350px;
   position: absolute;
-  top: 60px;
-  right: 10%;
+  top: 45px;
+  right: 13%;
   padding: 10px;
+  text-align: right;
 }
 
 .mainbox {
