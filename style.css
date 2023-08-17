@@ -301,6 +301,12 @@ width: 50%;
   .boxrhythm, .boxbass, .boxpercussion, .boxsynth {
     margin: 5px 0px;
   }
+  #drop_zone {
+    display: none;
+  }
+  .mainbox {
+    margin-top: 200px;
+  }
 }
 @media only screen and (max-width: 1024px) {
   #drop_zone {
@@ -310,6 +316,7 @@ width: 50%;
   .testy {
     display: inline-block;
   }
+  
 }
 @media only screen and (max-width: 992px) {
   .testy {
@@ -364,6 +371,7 @@ width: 50%;
 .mainbox {
   
   flex-direction: column;
+  margin-top: 100px;
 }
 #eqControls {
 
