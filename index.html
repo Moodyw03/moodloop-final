@@ -9,41 +9,30 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
+      crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
     <link rel="stylesheet" href="style.css" />
     <script
       src="https://kit.fontawesome.com/42d8882816.js"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   </head>
 
   <body>
     <nav class="navbar">
       <div class="container-fluid">
-        <a class="navbar-brand"
-          ><img src="/backgrounds/moodloop1.png" alt="logo"
-        /></a>
+        <a class="navbar-brand"><img src="/backgrounds/moodloop1.png" alt="logo" /></a>
         <div>
           <div class="wave"></div>
           <div class="wave"></div>
           <div class="wave"></div>
         </div>
       </div>
-      <div id="textbox">Moodloop by Moody Waters: 
+      <div id="textbox">Moodloop by Moody Waters:
         A quick web based stem player.
-        Drag from the desktop or arrow-tap on iOS - it's the quickest way to whip up tracks!</div> 
+        Drag from the desktop or arrow-tap on iOS - it's the quickest way to
+        whip up tracks!</div>
     </nav>
-    
-    <!-- <div class="vz-wrapper">
-    <audio id="myAudio" src="track33.mp3" data-author="Beethoven" data-title="Allegro"></audio>
-
-    <div class="vz-wrapper -canvas">
-      <canvas id="myCanvas" width="800" height="400"></canvas>
-    </div>
-  </div> -->
 
     <div id="drop_zone">Drop here</div>
 
@@ -52,33 +41,7 @@
     </div>
 
     <div class="mainbox">
-      <!-- <div class="wrapper">
-        <div class="knob">
-          <div class="label label-l"></div>
-          <div class="knob_inner" id="knob-inner">
-            <div class="knob_inner_pointer" id="knob-pointer"></div>
-          </div>
-          <div class="label label-r"></div>
-        </div>
-      </div>
-      <div class="wrapper">
-        <div class="knob">
-          <div class="label label-l"></div>
-          <div class="knob_inner" id="knob-inner2">
-            <div class="knob_inner_pointer" id="knob-pointer2"></div>
-          </div>
-          <div class="label label-r"></div>
-        </div>
-      </div>
-      <div class="wrapper">
-        <div class="knob">
-          <div class="label label-l"></div>
-          <div class="knob_inner" id="knob-inner3">
-            <div class="knob_inner_pointer" id="knob-pointer3"></div>
-          </div>
-          <div class="label label-r"></div>
-        </div>
-      </div> -->
+
       <div id="eqControls">
         <div>
           <label for="bass">Bass:</label>
@@ -89,8 +52,7 @@
             min="-50"
             max="50"
             step="1"
-            value="0"
-          />
+            value="0" />
           <span id="bassValue">0 dB</span>
         </div>
 
@@ -103,8 +65,7 @@
             min="-50"
             max="50"
             step="1"
-            value="0"
-          />
+            value="0" />
           <span id="midValue">0 dB</span>
         </div>
 
@@ -117,8 +78,7 @@
             min="-50"
             max="50"
             step="1"
-            value="0"
-          />
+            value="0" />
           <span id="trebleValue">0 dB</span>
         </div>
       </div>
@@ -127,7 +87,8 @@
     </div>
 
     <div class="container-fluid mt-0 bg-dark py-3">
-      <div class="row w-75 m-auto row-cols-1 row-cols-sm-1 row-cols-lg-2 row-cols-xl-4 boom">
+      <div
+        class="row w-75 m-auto row-cols-1 row-cols-sm-1 row-cols-lg-2 row-cols-xl-4 boom">
         <div class="col">
           <div class="boxbass">
             <h3>Rhythm</h3>
@@ -138,27 +99,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/house 1.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">beatique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -168,27 +125,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/house 2.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Drumstinct</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -198,27 +151,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/house 3.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Beatnomaly</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -228,27 +177,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/house 4.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Pulsique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -258,27 +203,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/house 5.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Rhythmosis</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -288,27 +229,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/techno 1.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Beatique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -318,27 +255,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/techno 2.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Percules</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -348,27 +281,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/techno 3.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Vibraint</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -378,27 +307,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/techno 4.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Taptasm</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -408,27 +333,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/rhythm/techno 5.mp3"
-                data-list="rhythm"
-              >
+                data-list="rhythm">
                 <p id="fileName" class="fileName">Rhythplex</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -446,27 +367,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 1.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Lowtique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -476,27 +393,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 2.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Basscape</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -506,27 +419,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 3.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Deepthrum</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -536,27 +445,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 4.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Resonique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -566,27 +471,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 5.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Bassment</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -596,27 +497,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 6.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Depthcharge</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -626,27 +523,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 7.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Lowlander</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -656,27 +549,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 8.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Bassify</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -686,27 +575,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 9.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Subterrane</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -716,27 +601,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/bass/bass 10.mp3"
-                data-list="bass"
-              >
+                data-list="bass">
                 <p id="fileName" class="fileName">Groundwave</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -753,27 +634,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 1.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Chestique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -783,27 +660,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 2.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Percangle</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -813,27 +686,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 3.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Sternumatic</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -843,27 +712,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 4.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Ricrealm</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -873,27 +738,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 5.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Percstasy</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -903,27 +764,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 6.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Thoractiq</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -933,27 +790,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 7.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Perculiar</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -963,27 +816,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 8.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Clavicube</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -993,27 +842,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 9.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Steniq</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1023,27 +868,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/perc/perc 10.mp3"
-                data-list="percussion"
-              >
+                data-list="percussion">
                 <p id="fileName" class="fileName">Pectorbit</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1060,27 +901,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 1.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Waveformic</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1090,27 +927,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 2.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Synthscend</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1120,27 +953,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 3.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Oscilliq</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1150,27 +979,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 4.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Modulight</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1180,27 +1005,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 5.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Filterf</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1210,27 +1031,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 6.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Resoshine</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1240,27 +1057,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 7.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Synthscape</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1270,27 +1083,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 8.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Phasique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1300,27 +1109,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 9.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Elecrique</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1330,27 +1135,23 @@
                 ondragstart="drag(event)"
                 ondragend="endDrag(event)"
                 data-audio="music/synth/synth 10.mp3"
-                data-list="synth"
-              >
+                data-list="synth">
                 <p id="fileName" class="fileName">Pulseplay</p>
                 <div class="controls">
                   <button
                     onclick="simulateDragToDropzone(event)"
-                    class="mobile-drag testy"
-                  >
-                  <i class="fa-solid fa-arrow-up"></i>
+                    class="mobile-drag testy">
+                    <i class="fa-solid fa-arrow-up"></i>
                   </button>
                   <button onclick="playSolo(event)">
                     <i
                       class="fa-solid fa-headphones-simple"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                   <button onclick="muteTheAudio(event)">
                     <i
                       class="fa-solid fa-volume-xmark"
-                      style="color: #ffffff"
-                    ></i>
+                      style="color: #ffffff"></i>
                   </button>
                 </div>
               </div>
@@ -1363,17 +1164,17 @@
       <div class="footermood">
         <div class="row foot">
           <div class="col">
-         <form>
-         
-          <input type="email" placeholder="email">
-          <input type="submit" value="send email">
-         </form>
+            <form>
+
+              <input type="email" placeholder="email">
+              <input type="submit" value="send email">
+            </form>
           </div>
           <div class="col social">
-            <a href=""><i class="fa-brands fa-instagram"></i></a>
-            <a href=""><i class="fa-brands fa-facebook"></i></a>
-            <a href=""><i class="fa-brands fa-tiktok"></i></a>
-            <a href=""><i class="fa-brands fa-github"></i></a>
+            <a href><i class="fa-brands fa-instagram"></i></a>
+            <a href><i class="fa-brands fa-facebook"></i></a>
+            <a href><i class="fa-brands fa-tiktok"></i></a>
+            <a href><i class="fa-brands fa-github"></i></a>
           </div>
         </div>
       </div>
@@ -1382,4 +1183,3 @@
     <script src="main.js"></script>
   </body>
 </html>
-
