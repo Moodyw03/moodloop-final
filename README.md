@@ -3,9 +3,9 @@
 
 [View the live project here.]([https://moodywaters-milestone1-ci.netlify.app/](https://moodloop.netlify.app/)
 
-Welcome to Moodloop, the web-based stem mixing interface that allows you to create quick tracks by combining different stems and sounds. With Moodloop, you can easily drag or click on arrows to mix up to four different stems, including rhythm, bass, percussion, and synth. Whether you're a music enthusiast, producer, or simply looking to explore your creativity, Moodloop is here to help you bring your ideas to life.
+Welcome to Moodloop, a web-based stem mixing interface that allows you to create quick tracks by combining different stems and sounds. With Moodloop, you can easily drag or click on arrows to mix up to four different stems, including rhythm, bass, percussion, and synth. Whether you're a music enthusiast, producer, or simply looking to explore your creativity, Moodloop is here to help you bring your ideas to life.
 
-This submission represents my Milestone Project 2 for the Code Institute's Diploma in Web Application Development program. My website comprises of one audio app and utilizes the HTML and CSS and Javascript technologies I have acquired throughout the course.
+This submission represents Milestone Project 2 for the Code Institute's Diploma in Web Application Development program. My website comprises one audio app and utilizes the HTML, CSS and Javascript technologies I have acquired throughout the course.
 
 ## Repository
 
@@ -13,7 +13,7 @@ This submission represents my Milestone Project 2 for the Code Institute's Diplo
 
 
 
-<h2 align="center"><img src= https://i.ibb.co/yXPbXJx/Screenshot-2023-05-03-at-20-32-11.png"></h2>
+<h2 align="center"><img src= "(https://ibb.co/ZLLWz7R)"></h2>
 
 ## User Experience (UX)
 
