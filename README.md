@@ -13,7 +13,7 @@ This submission represents Milestone Project 2 for the Code Institute's Diploma 
 
 
 
-<h2 align="center"><img src= "(https://ibb.co/ZLLWz7R)"></h2>
+<a href="https://ibb.co/ZLLWz7R"><img src="https://i.ibb.co/2nng3H0/moodloop-mockup.jpg" alt="moodloop-mockup" border="0"></a>
 
 ## User Experience (UX)
 
