@@ -205,76 +205,7 @@ The W3C Markup Validator and W3C CSS Validator Services were used to validate ev
   <img src="https://i.ibb.co/HYRswtG/Screenshot-2023-05-08-at-12-01-45.png" alt="CSS">
 </p>
     
- #Lighthouse   
-    
-### Lighthouse Report for Homepage (Desktop)
-<h2 align="center"><img src="https://i.ibb.co/QP0Xm31/Screenshot-2023-05-08-at-18-46-15.png"></h2>
 
-### Lighthouse Report for Homepage (Mobile)
-<h2 align="center"><img src="https://i.ibb.co/MS3vGHn/Screenshot-2023-05-08-at-18-43-54.png"></h2>
-
-
-
--   #### First Time Visitor Goals
-
-    As a First Time Visitor, I want to easily grasp the website's primary purpose and learn more about the artist.
-Upon arrival, visitors are greeted with an intuitive and legible navigation bar for effortless access to desired pages. A captivating hero image with text and a "Learn More" call-to-action button is prominently featured.
-Key information is conveyed through the hero image, guiding users to either click the call-to-action button or scroll down to explore further about the artist.
-As a First Time Visitor, I want to seamlessly navigate the site and locate content with ease.
-Designed for a fluid user experience, the site ensures visitors never feel trapped. A clear navigation bar is available at the top of each page.
-The first three pages include a call-to-action at the bottom, guiding users to the next relevant section.
-On the Contact Us page, submitting the form refreshes the page and directs users to the top, where the navigation bar is located.
-As a First Time Visitor, I want to review testimonials to gauge the artist's reputation and locate social media links to assess their online presence.
-After exploring the Contact and portfolio pages, visitors encounter the press and visuals pages.
-Social media links can be found in the footer of every page.
-At the bottom of the Contact page, visitors are informed that they can also reach out to the artist via social media, emphasizing the availability of these channels.
-
--   #### Returning Visitor Goals
-
-    As a Returning Visitor, I want to discover new audio-visual and DJ mixes.
-
-A banner message prominently highlights recent updates.
-Visitors are directed to a dedicated page featuring another hero image and a call-to-action button.
-As a Returning Visitor, I want to easily connect with the artist or organization for inquiries.
-
-The "Contact" page is clearly marked in the navigation bar.
-Visitors can complete the on-page form or opt to message the artist on social media.
-The footer contains links to the artist's Facebook, Twitter, Instagram, Tik Tok.
-Each link opens in a new tab for convenient navigation back to the website.
-Clicking the email button launches the user's email app, auto-filling the artist's email address in the "To" field.
-
-
-The Facebook and other social media Page link is accessible in the footer of every page, opening in a new tab for a seamless experience.
-Alternatively. Like other external links, it opens in a new tab for easy return to the website.
-
--   #### Frequent User Goals
-
-    1. As a Frequent User, I want to check to see if there are updates and new music/visuals.
-
-        1. The user would already be comfortable with the website layout and can easily navigate the pages.
-
-    2. As a Frequent User, I want to check to see if there are any new blog and press posts.
-
-        1. The user would already be comfortable with the website layout and can easily click the blog link
-
-    3. As a Frequent User, I want to sign up to the Newsletter so that I am emailed any major updates and/or changes to the website or organisation.
-        1. At the bottom of every page their is a footer which content is consistent throughout all pages.
-        
-
-### Further Testing
-
--   The Website was tested on Google Chrome, Internet Explorer, Microsoft Edge and Safari browsers.
--   The website was viewed on a variety of devices such as Desktop, Laptop, iPhone x,IPad, iPhone pro & iPhoneX.
--   A large amount of testing was done to ensure that all pages were linking correctly.
--   Friends and family members were asked to review the site and documentation to point out any bugs and/or user experience issues.
-
-### Known Bugs
-
--   on some devices the hamburger menu gets slightly positioned out of the layout.
--    some problems were encountered ebbeding Nft's on the Polygon blockchain. I had to change to ETH.
-    
-    
-  
 
 ## Deployment
 
@@ -284,7 +215,7 @@ The project was deployed to GitHub Pages using the following steps...
 
 1. Log in to GitHub and locate the [GitHub Repository](https://github.com/)
 2. At the top of the Repository (not top of page), locate the "Settings" Button on the menu.
-    - Alternatively Click [Here](https://raw.githubusercontent.com/) for a GIF demonstrating the process starting from Step 2.
+    - Alternatively, Click [Here](https://raw.githubusercontent.com/) for a GIF demonstrating the process starting from Step 2.
 3. Scroll down the Settings page until you locate the "GitHub Pages" Section.
 4. Under "Source", click the dropdown called "None" and select "Master Branch".
 5. The page will automatically refresh.
@@ -325,8 +256,8 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
 
 ## Credits
-    Music by Moody Waters. 
-    visuals by Moody Waters.
+    stems by Moody Waters. 
+    
     hover effect on navbar taken from bestJquery: https://bestjquery.com/tutorial/link/demo169/
     Glitch effect on text taken from Piotr Galor : https://codepen.io/pgalor/pen/OeRWJQ
     
