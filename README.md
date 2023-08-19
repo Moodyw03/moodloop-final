@@ -192,20 +192,9 @@ This section paints a clear picture of how media queries are employed within the
 
 ## Testing
 
-The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
+For more detailed testing information on Moodloop, please refer to the [testing documentation](https://github.com/Moodyw03/moodloop-final/blob/main/TESTING.md).
 
--   [W3C Markup Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
-    
-    <p align="center">
-  <img src="https://i.ibb.co/MsfjRPB/Screenshot-2023-05-08-at-12-06-34.png" alt="CSS">
-</p>
-    
--   [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
-    
-<p align="center">
-  <img src="https://i.ibb.co/HYRswtG/Screenshot-2023-05-08-at-12-01-45.png" alt="CSS">
-</p>
-    
+
 
 
 ## Deployment
