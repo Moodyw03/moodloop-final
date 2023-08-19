@@ -1,7 +1,7 @@
 # moodloop-final
 <h1 align="center">Moodloop</h1>
 
-[View the live project here.]([https://moodywaters-milestone1-ci.netlify.app/](https://moodloop.netlify.app/)
+[View the live project here.](https://moodloop.netlify.app/)
 
 Welcome to Moodloop, a web-based stem mixing interface that allows you to create quick tracks by combining different stems and sounds. With Moodloop, you can easily drag or click on arrows to mix up to four different stems, including rhythm, bass, percussion, and synth. Whether you're a music enthusiast, producer, or simply looking to explore your creativity, Moodloop is here to help you bring your ideas to life.
 
@@ -9,7 +9,7 @@ This submission represents Milestone Project 2 for the Code Institute's Diploma 
 
 ## Repository
 
-[Find the project repository here:(https://github.com/Moodyw03/moodloop-final)
+[Find the project repository here:](https://github.com/Moodyw03/moodloop-final)
 
 
 
