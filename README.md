@@ -247,10 +247,10 @@ Copy code:
 
 $ git clone https://github.com/Moodyw03/moodloop-final.git
 - Cloning into `moodloop-final`...
--remote: Counting objects: XX, done.
+- remote: Counting objects: XX, done.
 - remote: Compressing objects: 100% (X/X), done.
--remote: Total XX (delta X), reused XX (delta X)
--Unpacking objects: 100% (XX/XX), done.
+- remote: Total XX (delta X), reused XX (delta X)
+- Unpacking objects: 100% (XX/XX), done.
 
 
 
