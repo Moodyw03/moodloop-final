@@ -221,26 +221,38 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 ### Making a Local Clone
 
-1. Log in to GitHub and locate the [GitHub Repository](https://github.com/Moodyw03/MW-WEB-22apr)
-2. Under the repository name, click "Clone or download".
-3. To clone the repository using HTTPS, under "Clone with HTTPS", copy the link.
-4. Open Git Bash
-5. Change the current working directory to the location where you want the cloned directory to be made.
-6. Type `git clone`, and then paste the URL you copied in Step 3.
+Making a Local Clone of "moodloop-final"
 
-```
-$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
-```
+Log in to GitHub and locate the moodloop-final GitHub Repository at this link:
+https://github.com/Moodyw03/moodloop-final
 
-7. Press Enter. Your local clone will be created.
+Under the repository name, click the "Code" button.
 
-```
-$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
-> Cloning into `CI-Clone`...
-> remote: Counting objects: 10, done.
-> remote: Compressing objects: 100% (8/8), done.
-> remove: Total 10 (delta 1), reused 10 (delta 1)
-> Unpacking objects: 100% (10/10), done.
+To clone the repository using HTTPS, under "Clone with HTTPS", copy the provided link.
+
+Open Git Bash on your computer.
+
+Change the current working directory to the location where you want the cloned directory to be made.
+
+Type git clone, and then paste the URL you copied in Step 3. Here's the command for your specific repository:
+
+bash
+
+Copy code:
+$ git clone https://github.com/Moodyw03/moodloop-final.git
+Press Enter. Your local clone of the moodloop-final repository will be created. You should see an output similar to this:
+
+bash
+Copy code:
+
+$ git clone https://github.com/Moodyw03/moodloop-final.git
+> Cloning into `moodloop-final`...
+> remote: Counting objects: XX, done.
+> remote: Compressing objects: 100% (X/X), done.
+> remote: Total XX (delta X), reused XX (delta X)
+> Unpacking objects: 100% (XX/XX), done.
+
+(Note: The XX and X/X in the output will represent the actual number of objects in your repository, so they will likely be different numbers.)
 ```
 
 Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
