@@ -1,26 +1,20 @@
 ## Testing
 
-The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
+The W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
 
--   [W3C Markup Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
-    
-    <p align="center">
-  <img src="https://i.ibb.co/MsfjRPB/Screenshot-2023-05-08-at-12-06-34.png" alt="CSS">
-</p>
-    
 -   [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
     
-<p align="center">
-  <img src="https://i.ibb.co/HYRswtG/Screenshot-2023-05-08-at-12-01-45.png" alt="CSS">
-</p>
+<a href="https://ibb.co/9pkJCwt"><img src="https://i.ibb.co/JcwNMxQ/Screenshot-2023-08-19-at-11-28-28.png" alt="Screenshot-2023-08-19-at-11-28-28" border="0"></a>
+
+
     
  #Lighthouse   
     
-### Lighthouse Report for Homepage (Desktop)
-<h2 align="center"><img src="https://i.ibb.co/QP0Xm31/Screenshot-2023-05-08-at-18-46-15.png"></h2>
+### Lighthouse Report for app. 
 
-### Lighthouse Report for Homepage (Mobile)
-<h2 align="center"><img src="https://i.ibb.co/MS3vGHn/Screenshot-2023-05-08-at-18-43-54.png"></h2>
+<a href="https://ibb.co/QMhTc94"><img src="https://i.ibb.co/RctsS2q/Screenshot-2023-08-19-at-11-40-33.png" alt="Screenshot-2023-08-19-at-11-40-33" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>upload picture online and get url</a><br />
+
+
 
         
 
