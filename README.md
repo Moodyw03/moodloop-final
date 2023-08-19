@@ -128,7 +128,7 @@ Beyond static colors, the interface employs a shifting background gradient anima
 
 *   ### Wireframes
 
-    -   Home Page Wireframe - [View](https://pdfhost.io/v/caoGDwgUA_Moody_Wireframes)
+    -   Home Page Wireframe - [View](https://pdfhost.io/v/2JUYSOaP4_moodloop_wireframe)
 
 
    
