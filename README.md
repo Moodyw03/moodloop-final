@@ -13,56 +13,117 @@ This submission represents Milestone Project 2 for the Code Institute's Diploma 
 
 
 
+<div align="center">
+
 <a href="https://ibb.co/ZLLWz7R"><img src="https://i.ibb.co/2nng3H0/moodloop-mockup.jpg" alt="moodloop-mockup" border="0"></a>
+
+</div>
 
 ## User Experience (UX)
 
 -   ### User stories
 
-    -   #### First Time Visitor Goals
+    -   #### First Time Visitor Goals.
 
-<stron>Intuitive Understanding and Artist Connection.</stron>
+<strong>Intuitive Understanding and Artist Connection.</strong>
 
 Objective: Enable newcomers to immediately grasp the primary function of the Moodloop platform while simultaneously gaining insight into the artist or creators behind the stems.
 Highlight a brief, clear description of Moodloop's stem mixing capabilities on the landing page.
 Feature an "About the Artist" section or profile prominently, which can include their bio, vision, and any featured tracks they've created using Moodloop.
 
-Seamless Navigation and Content Discovery.
+<strong>Seamless Navigation and Content Discovery.</strong>
 
 Objective: Ensure that first-time users can easily explore and find relevant features, stems, or information without any hindrances.
 Maintain a clean, intuitive layout with a well-defined menu or navigation interface.
 Utilize clear icons, labels, and tooltips over essential features to guide users in their exploration.
 
-First-Time Visitor Goal: Trust Building and Social Engagement.
+<strong>Joyful Exploration and Music Creation.</strong>
 
-Objective: Allow newcomers to access reviews or testimonials to understand other users' experiences and verify the platform's credibility. Additionally, enable them to find and connect with the artist or Moodloop community on various social media channels.
+Inspire newcomers to dive into the music creation process and ensure they derive joy and satisfaction from their initial interactions, even if they lack prior music-making experience.
+
+Use playful visual cues when users make successful mix combinations, reinforcing a sense of achievement.
+Showcase Easy Wins:
+Feature an "Instant Creation" option where users can generate a basic track with a single click or drag-and-drop, giving them immediate gratification.
+Offer preset stem combinations tailored for beginners, allowing them to experiment and create pleasant-sounding tracks without the intimidation of starting from scratch.
+
+-   #### Returning Visitor Goals.
+
+
+<strong>Seamless Continuation and Fresh Starts.</strong>
+
+Facilitate returning users in picking up from their last session or jumping straight into a new creation effortlessly.
 Using Current Features:
-Showcase a dedicated "Testimonials" or "User Reviews" section where positive feedback from the community is highlighted.
-Prominently display social media icons or links that lead to the artist's and Moodloop's official pages, encouraging users to engage and stay updated on the latest releases or news.
+Upon logging in or accessing the platform, present users with the option to "Resume Last Project" or "Start a New Loop", streamlining their decision-making process.
+Display a brief overview or snapshot of their last session (e.g., "Last used stems: Rhythm, Bass, Percussion").
+Mastery Through Enhanced Playability.
 
-    -   #### Returning Visitor Goals
+Allow regular users to deepen their experience by effortlessly utilizing and mastering the in-built features like buffer options, including mute and solo functionalities.
+Using Current Features:
+Highlight advanced tutorials or tips that delve into maximizing the use of buffer options for on-the-fly playability, specifically emphasizing the mute and solo functions.
+Showcase quick-access buttons or shortcuts for these buffer functionalities, ensuring they're easily accessible for users who want to experiment in real time.
 
-        1. For Returning Visitors: Seek updated details on audiovisual and Music related Artist output.
-        2. For Returning Visitors: Effortlessly discover optimal methods for reaching out to the artist with inquiries.
-        3. For Returning Visitors: Access valuable links and resources for further engagement.
+<strong>Deepened Engagement Through Resource Discovery.</strong>
 
-    -   #### Frequent User Goals
-        1. For Frequent Users: Stay up-to-date on the latest audiovisual and music projects.
-        2. For Frequent Users: Regularly explore newly published blog posts for insights into the artist's creative journey and industry trends.
-        3. For Frequent Users: Subscribe to the newsletter for exclusive access to significant updates, goodies, and noteworthy news related to the artist.
+Offer returning users more avenues to explore, learn, and immerse themselves in the Moodloop community and related content.
+Using Current Features:
+Present a curated "Resources" or "Explore More" section that contains valuable links, tutorials, community forums, and other related material to deepen their Moodloop experience.
+Prominently display notifications or updates on any new features, stem additions, or community events, ensuring regular users are always in the loop.
+
+ -   #### Frequent User Goals.
+
+<strong>Monthly Sample Refresh.</strong>
+
+Reward loyal and active subscribers with fresh musical content consistently.
+Using Current Features:
+Notify subscribers through the user dashboard or a dedicated section about the "Sample of the Month", ensuring they are always aware of the newest additions.
+Highlight these new samples with labels or badges like "New" or "Exclusive" to make them stand out when browsing the library.
+For Frequent Users: Exploration and Mastery.
+
+Encourage habitual users to continuously discover and integrate newly added sounds and features into their creations.
+Using Current Features:
+Feature a "What's New" section on their homepage or dashboard that showcases the latest sounds, stems, and features.
+Offer interactive tooltips or mini-tutorials that guide frequent users in using new features, ensuring they can seamlessly incorporate them into their workflow.
+For Frequent Users: Insider Knowledge Through Newsletter Subscription.
+
+Keep the most dedicated members of the Moodloop community informed and privileged with exclusive content, updates, and opportunities.
+Using Current Features:
+Prominently display an option to "Join the Insider Newsletter" for those who haven’t subscribed yet, emphasizing the exclusivity and benefits.
+Send out newsletters with content that is not just news but also exclusive sample previews, advanced tutorials, or special subscriber-only events, reinforcing the value of their subscription.
 
 -  ### Design
-
-<p align="center">
-  <img src="https://i.ibb.co/7vyLgSq/pallete-good.jpg" alt="Palette">
-</p>
+<div align="center">
+<a href="https://ibb.co/MkKML2G"><img src="https://i.ibb.co/jkqgF6W/moodloop-palette-copy.jpg" alt="moodloop-palette-copy" border="0"></a>
+</div>
 
 - #### Colour Scheme
-  - A minimalist and cohesive color palette has been employed to facilitate seamless navigation, while simultaneously capturing the profound essence of the artist's sonic signature.
+  Primary Color - Azure Radiance:
+  Hex: #20242c
+  Usage: Ideal for primary buttons, headers, and active navigation items. Azure Radiance exudes a sense of sophistication and depth.
+  2. Secondary Color - Moody Blue:
+  Hex: #6263d7
+  Usage: Perfect for secondary UI elements, hover states, and subtle highlights. Moody Blue adds vibrancy and a touch of creativity.
+ 3. Gradient Start - Light Sky Blue:
+  Hex: #87CEFA
+  Usage: This lighter shade of blue can serve as the starting point for background gradients or soft UI highlights, initiating the sense of movement.
+  4. Gradient Mid - Cornflower Blue:
+  Hex: #6495ED
+  Usage: Serves as the mid-point in our gradient, transitioning smoothly from Light Sky Blue to Azure Radiance, reinforcing the feeling of flow and transition.
+  5. Text Color - Shuttle Gray:
+  Hex: #5e6267
+  Usage: Used primarily for text, ensuring readability against the gradient blue background.
+
 - #### Typography
-  - The Roboto typeface serves as the primary font across the website, with Sans Serif acting as a fallback option should any issues arise with the font importation process. Renowned for its crisp appearance and prevalent use in programming, Roboto is both visually appealing and contextually fitting.
+
+Font Family: Roboto Mono
+
+Description: Roboto Mono is a monospaced variant of the Roboto typeface. With its evenly spaced characters and clear, modern design, Roboto Mono provides an aesthetic of precision and technicality. This makes it an ideal choice for Moodloop, where a blend of creativity and structure is essential. The typeface ensures that text across the platform is easily readable while still retaining a contemporary and sleek appearance. Whether used in headers or body text, Roboto Mono brings consistency and a touch of modernity to the user interface.
+
 - #### Imagery
-  - Imagery plays a crucial role in capturing user interest. The prominent background hero image boasts a striking, eye-catching design, accentuated by its contemporary and dynamic visual appeal.
+
+ <strong>Animated CSS Background.</strong>
+Leveraging the capabilities of CSS animations, the interface boasts a dynamic background that evolves over time. This not only infuses the platform with an element of motion but also ensures that the users' attention remains engaged. Such animated backgrounds bring visual interest and a touch of liveliness, elevating the user experience of any website or web application.
+Beyond static colors, the interface employs a shifting background gradient animated through CSS. The gradual transition of colors provides depth and a sense of fluidity. The ever-changing hues instill a mood of continuous exploration and wonder, aligning perfectly with the dynamic nature of the Moodloop platform. This approach goes beyond mere aesthetics, as it subtly guides users through the platform, ensuring their experience remains fresh and immersive.
+
 
 
 *   ### Wireframes
