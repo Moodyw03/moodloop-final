@@ -255,7 +255,11 @@ $ git clone https://github.com/Moodyw03/moodloop-final.git
 (Note: The XX and X/X in the output will represent the actual number of objects in your repository, so they will likely be different numbers.)
 ```
 
+
 Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
+
+
+
 
 ## Credits
     stems by Moody Waters. 
