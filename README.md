@@ -169,25 +169,28 @@ This section paints a clear picture of how media queries are employed within the
 
 1. [Bootstrap 4.4.1:](https://getbootstrap.com/docs/4.4/getting-started/introduction/)
     - Bootstrap was used to assist with the responsiveness and styling of some parts of the website such as footer and navigation bar.
-1. [bestJquery.com:](https://bestjquery.com/tutorial/link/demo169/)
-    - Best Jquery was used on the navigation. pages to create a hover effect.
+1. [Jquery.com](https://jquery.com/):]
+    - Jquery was used on the whole interface and for the use of APIs.
 1. [Google Fonts:](https://fonts.google.com/)
     - Google fonts were used to import the 'roboto' font into the style.css file which is used on all pages throughout the project.
 1. [Font Awesome:](https://fontawesome.com/)
     - Font Awesome was utilized across the entire website to incorporate icons, enhancing both the visual appeal and user experience, particularly in the footer and Discography section.
 1. [jQuery:](https://jquery.com/)
-    - jQuery came with Bootstrap to make the navbar responsive but was also used for the animation on the navbar.
+   it was used to facilitate DOM manipulation, event handling, AJAX operations, and animations, and ensure cross-browser compatibility.
 1. [Git](https://git-scm.com/)
     - Git was used for version control by utilizing the Gitpod terminal to commit to Git and Push to GitHub.
 1. [GitHub:](https://github.com/)
-    - GitHub is used to store the projects code after being pushed from Git.
+    - GitHub is used to store the code of the project after being pushed from Git.
 1. [Photoshop:](https://www.adobe.com/ie/products/photoshop.html)
-    - Photoshop was used to create edit the background images, resizing  and editing photos for the website.
+    - Photoshop was used to create and edit the background images, resizing  and editing photos for the website.
 1. [Balsamiq:](https://balsamiq.com/)
     - Balsamiq was used to create the [wireframes](https://github.com/) during the design process.
-1. [Pexels](https://www.pexels.com/)
-  - Pexels was used to source imagery for the website.
-    
+1. [vanilla js](https://vanilla.js.org/)
+  -  Vanilla JS was utilized for audio context management, drag-and-drop functionality, audio playback controls, and manipulating Web Audio API functionalities without relying on jQuery or any other libraries.
+1. [vite](https://vitejs.dev/)
+    Vite was used in this project as a build tool to streamline development with rapid hot module replacement, efficiently bundle assets for production, and integrate seamlessly with modern JavaScript frameworks.
+   1. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+      The Web Audio API was used to create, control, and manipulate audio sources, enabling real-time audio processing and playback, particularly for features like loading audio files, looping them synchronously, adjusting their volumes, muting/unmuting, and applying equalizer settings.
 
 ## Testing
 
