@@ -261,8 +261,8 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 
 
 
-## Credits
-    stems by Moody Waters. 
+  ## Credits
+    All audio stems by Moody Waters. 
     
     hover effect on navbar taken from bestJquery: https://bestjquery.com/tutorial/link/demo169/
     Glitch effect on text taken from Piotr Galor : https://codepen.io/pgalor/pen/OeRWJQ
