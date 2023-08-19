@@ -35,16 +35,16 @@ An attempt to test with Jest was made, however, it seemed not compatible with "v
 
 ### Further Testing
 
--   The Website was tested on Google Chrome, Internet Explorer, Microsoft Edge and Safari browsers.
--   The website was viewed on a variety of devices such as Desktop, Laptop, iPhone x,IPad, iPhone pro & iPhoneX.
--   A large amount of testing was done to ensure that all pages were linking correctly.
+-   The Website was tested on Google Chrome, mozilla and Safari browsers.
+-   The website was viewed on a variety of devices such as Desktop, Laptop, iPhone x,IPad, iPhone pro.
+-   A large amount of testing was done to ensure that the app was responsive in all devices.
 -   Friends and family members were asked to review the site and documentation to point out any bugs and/or user experience issues.
 
 ### Known Bugs
 
--   on some devices the hamburger menu gets slightly positioned out of the layout.
--    some problems were encountered ebbeding Nft's on the Polygon blockchain. I had to change to ETH.
-    
+- There's a noticeable millisecond delay at the conclusion of each loop, attributable to the buffer of the Web Audio API. It appears this buffer isn't sufficiently robust to manage 4 players seamlessly.
+
+- Occasionally, upon selecting the "pre-listen" option, certain audio files exhibit a reduced volume.
     
   
 
