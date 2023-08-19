@@ -21,9 +21,24 @@ This submission represents Milestone Project 2 for the Code Institute's Diploma 
 
     -   #### First Time Visitor Goals
 
-        1. First-Time Visitor Goal: Swiftly comprehend the website's core objective while acquiring in-depth knowledge about the Artist.
-        2. First-Time Visitor Goal: Effortlessly traverse the site, locating relevant content with ease.
-        3. First-Time Visitor Goal: Seek out testimonials to gauge user opinions and establish trustworthiness, while also identifying social media links to assess the artist's online presence and reputation.
+<stron>Intuitive Understanding and Artist Connection.</stron>
+
+Objective: Enable newcomers to immediately grasp the primary function of the Moodloop platform while simultaneously gaining insight into the artist or creators behind the stems.
+Highlight a brief, clear description of Moodloop's stem mixing capabilities on the landing page.
+Feature an "About the Artist" section or profile prominently, which can include their bio, vision, and any featured tracks they've created using Moodloop.
+
+Seamless Navigation and Content Discovery.
+
+Objective: Ensure that first-time users can easily explore and find relevant features, stems, or information without any hindrances.
+Maintain a clean, intuitive layout with a well-defined menu or navigation interface.
+Utilize clear icons, labels, and tooltips over essential features to guide users in their exploration.
+
+First-Time Visitor Goal: Trust Building and Social Engagement.
+
+Objective: Allow newcomers to access reviews or testimonials to understand other users' experiences and verify the platform's credibility. Additionally, enable them to find and connect with the artist or Moodloop community on various social media channels.
+Using Current Features:
+Showcase a dedicated "Testimonials" or "User Reviews" section where positive feedback from the community is highlighted.
+Prominently display social media icons or links that lead to the artist's and Moodloop's official pages, encouraging users to engage and stay updated on the latest releases or news.
 
     -   #### Returning Visitor Goals
 
