@@ -178,17 +178,17 @@ This section paints a clear picture of how media queries are employed within the
 1. [Git](https://git-scm.com/)
     - Git was used for version control by utilizing the Gitpod terminal to commit to Git and Push to GitHub.
 1. [GitHub:](https://github.com/)
-    - GitHub is used to store the code of the project after being pushed from Git.
+    - GitHub is used to store the code of the project after it is pushed from Git.
 1. [Photoshop:](https://www.adobe.com/ie/products/photoshop.html)
     - Photoshop was used to create and edit the background images, resizing  and editing photos for the website.
 1. [Balsamiq:](https://balsamiq.com/)
     - Balsamiq was used to create the [wireframes](https://github.com/) during the design process.
 1. [vanilla js](https://vanilla.js.org/)
-  -  Vanilla JS was utilized for audio context management, drag-and-drop functionality, audio playback controls, and manipulating Web Audio API functionalities without relying on jQuery or any other libraries.
+     -  Vanilla JS was utilized for audio context management, drag-and-drop functionality, audio playback controls, and manipulating Web Audio API functionalities without relying on jQuery or any other libraries.
 1. [vite](https://vitejs.dev/)
-    Vite was used in this project as a build tool to streamline development with rapid hot module replacement, efficiently bundle assets for production, and integrate seamlessly with modern JavaScript frameworks.
-   1. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-      The Web Audio API was used to create, control, and manipulate audio sources, enabling real-time audio processing and playback, particularly for features like loading audio files, looping them synchronously, adjusting their volumes, muting/unmuting, and applying equalizer settings.
+   -  Vite was used in this project as a build tool to streamline development with rapid hot module replacement, efficiently bundle assets for production, and integrate seamlessly with modern JavaScript frameworks.
+1. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+   -  The Web Audio API was used to create, control, and manipulate audio sources, enabling real-time audio processing and playback, particularly for features like loading audio files, looping them synchronously, adjusting their volumes, muting/unmuting, and applying equalizer settings.
 
 ## Testing
 
