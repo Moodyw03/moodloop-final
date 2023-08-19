@@ -1,22 +1,27 @@
-## Testing
+## Testing.
 
 The W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
 
 -   [W3C CSS Validator](https://jigsaw.w3.org/css-validator/#validate_by_input) 
-    
+   <div align="center"> 
 <a href="https://ibb.co/9pkJCwt"><img src="https://i.ibb.co/JcwNMxQ/Screenshot-2023-08-19-at-11-28-28.png" alt="Screenshot-2023-08-19-at-11-28-28" border="0"></a>
+   </div>
+
 
 
     
  #Lighthouse   
     
 ### Lighthouse Report for app. 
+<div align="center">
+<a href="https://ibb.co/QMhTc94"><img src="https://i.ibb.co/RctsS2q/Screenshot-2023-08-19-at-11-40-33.png" alt="Screenshot-2023-08-19-at-11-40-33" border="0"></a><br />
+</div>
 
-<a href="https://ibb.co/QMhTc94"><img src="https://i.ibb.co/RctsS2q/Screenshot-2023-08-19-at-11-40-33.png" alt="Screenshot-2023-08-19-at-11-40-33" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>upload picture online and get url</a><br />
+### A11y Color Contrast Accessibility Checker.
+<div align="center">
+<a href="https://ibb.co/LnZy6JT"><img src="https://i.ibb.co/KFrg7Lt/Screenshot-2023-08-19-at-11-39-13.png" alt="Screenshot-2023-08-19-at-11-39-13" border="0"></a><br />
+        </div>
 
-
-
-        
 
 ### Further Testing
 
