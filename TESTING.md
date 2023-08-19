@@ -22,6 +22,16 @@ The W3C CSS Validator Services were used to validate every page of the project t
 <a href="https://ibb.co/LnZy6JT"><img src="https://i.ibb.co/KFrg7Lt/Screenshot-2023-08-19-at-11-39-13.png" alt="Screenshot-2023-08-19-at-11-39-13" border="0"></a><br />
         </div>
 
+### Javascript.
+The JavaScript code for this project was validated using: [jshint.](https://jshint.com/)
+<div align="center">
+<a href="https://ibb.co/2crrR3n"><img src="https://i.ibb.co/9y00BH8/jshint-moodloop.jpg" alt="jshint-moodloop" border="0"></a>
+</div>
+
+### Jest. 
+An attempt to test with Jest was made, however, it seemed not compatible with "vite" and Babel.
+<div align="center">
+<a href="https://ibb.co/cCXJCSg"><img src="https://i.ibb.co/P9zx9vm/Screenshot-2023-08-18-at-16-12-55.png" alt="Screenshot-2023-08-18-at-16-12-55" border="0"></a></div>
 
 ### Further Testing
 
