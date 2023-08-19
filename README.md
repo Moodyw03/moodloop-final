@@ -169,8 +169,6 @@ This section paints a clear picture of how media queries are employed within the
 
 1. [Bootstrap 4.4.1:](https://getbootstrap.com/docs/4.4/getting-started/introduction/)
     - Bootstrap was used to assist with the responsiveness and styling of some parts of the website such as footer and navigation bar.
-1. [Jquery.com](https://jquery.com/):]
-    - Jquery was used on the whole interface and for the use of APIs.
 1. [Google Fonts:](https://fonts.google.com/)
     - Google fonts were used to import the 'roboto' font into the style.css file which is used on all pages throughout the project.
 1. [Font Awesome:](https://fontawesome.com/)
