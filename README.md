@@ -192,7 +192,7 @@ This section paints a clear picture of how media queries are employed within the
 1. [ChatGPT](https://openai.com/)
    -  GPT was leveraged for advanced problem resolution.
 1. [VScode](https://code.visualstudio.com/)
-   -  VS code was the chosen IDE to execute this app.
+   -  The application was developed and executed using Visual Studio Code as the preferred Integrated Development Environment (IDE).
 
 
 ## Testing
