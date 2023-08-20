@@ -189,8 +189,8 @@ This section paints a clear picture of how media queries are employed within the
    -  Vite was used in this project as a build tool to streamline development with rapid hot module replacement, efficiently bundle assets for production, and integrate seamlessly with modern JavaScript frameworks.
 1. [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
    -  The Web Audio API was used to create, control, and manipulate audio sources, enabling real-time audio processing and playback, particularly for features like loading audio files, looping them synchronously, adjusting their volumes, muting/unmuting, and applying equalizer settings.
-1. [ChatGPT](https://openai.com/))
-   -  GPT was used for troubleshooting.
+1. [ChatGPT](https://openai.com/)
+   -  GPT was leveraged for advanced problem resolution.
 1. [VScode](https://code.visualstudio.com/)
    -  VS code was the chosen IDE to execute this app.
 
