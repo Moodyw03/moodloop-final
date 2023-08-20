@@ -221,36 +221,19 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 ### Making a Local Clone
 
-Making a Local Clone of "moodloop-final"
+You will now have a fork of the repository, but you don't have the files in that repository locally on your computer.
 
-Log in to GitHub and locate the moodloop-final GitHub Repository at this link:
-https://github.com/Moodyw03/moodloop-final
+To make a local clone:
 
-Under the repository name, click the "Code" button.
+Log in to GitHub and go to the GitHub Repository
+Above the list of files, click Code.
+To clone the repository using HTTPS, under "Clone with HTTPS", click the 'Copy' icon. To clone the repository using an SSH key, including a certificate issued by your organization's SSH certificate authority, click Use SSH, then click the 'Copy' icon. To clone a repository using GitHub CLI, click Use GitHub CLI, then click the 'Copy' icon.
+Open Git Bash.
+Change the current working directory to the location where you want the cloned directory.
+Type git clone, and then paste the URL you copied earlier. It will look like this, with your GitHub AE username instead of YOUR-USERNAME:
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+Press Enter. Your local clone will be created.
 
-To clone the repository using HTTPS, under "Clone with HTTPS", copy the provided link.
-
-Open Git Bash on your computer.
-
-Change the current working directory to the location where you want the cloned directory to be made.
-
-Type git clone, and then paste the URL you copied in Step 3. Here's the command for your specific repository:
-
-bash
-
-Copy code:
-$ git clone https://github.com/Moodyw03/moodloop-final.git
-Press Enter. Your local clone of the moodloop-final repository will be created. You should see an output similar to this:
-
-bash
-Copy code:
-
-$ git clone https://github.com/Moodyw03/moodloop-final.git
-- Cloning into `moodloop-final`...
-- remote: Counting objects: XX, done.
-- remote: Compressing objects: 100% (X/X), done.
-- remote: Total XX (delta X), reused XX (delta X)
-- Unpacking objects: 100% (XX/XX), done.
 
 
 
@@ -260,9 +243,27 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
 
 
  ## Credits
- All Audio Stems created by Moody Waters at SM Studios.
-    
+ All Audio stems were created by Moody Waters at SM Studios.
+ 
+ Animated background using CSS Coding is taken from: Code with programmer.
 
+ 
+    
+## Acknowledgements
+
+Thank you to my Mentor for not checking even once, the time he was contacted, he didn't even reply stating that he was sick. 
+
+Gratitude to fellow Code Institute students and alumni for their assistance.
+
+Many thanks to the tutors and staff at the Code Institute for their unwavering support.
+
+A special thanks to the Code Institute London Community for their continuous encouragement and technical insights.
+
+Much gratitude to my family for their patience and understanding with me.
+
+
+
+Gabriel Pereira, 2023.
 
 ### Content
 
