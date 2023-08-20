@@ -96,20 +96,6 @@ $ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
 
 Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop) to retrieve pictures for some of the buttons and more detailed explanations of the above process.
 
-## Credits
-    Music by Moody Waters. 
-    visuals by Moody Waters.
-    hover effect on navbar taken from bestJquery: https://bestjquery.com/tutorial/link/demo169/
-    Glitch effect on text taken from Piotr Galor : https://codepen.io/pgalor/pen/OeRWJQ
-    
-
-### Code
-
--   The full-screen hero image code came from Pexels
-
--   [Bootstrap4](https://getbootstrap.com/docs/4.4/getting-started/introduction/): Bootstrap Library used throughout the project mainly to make site responsive using the Bootstrap Grid System.
-
-
 
 ### Content
 
