@@ -255,7 +255,7 @@ Click [Here](https://help.github.com/en/github/creating-cloning-and-archiving-re
     
 ## Acknowledgements
 
-Thank you to my Mentor for not checking even once, the time he was contacted, he didn't even reply stating that he was sick. 
+Thanks to my Mentor for not checking even once, the time he was contacted, he didn't even reply stating that he was sick after a while. 
 
 Gratitude to fellow Code Institute students and alumni for their assistance.
 
