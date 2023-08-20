@@ -194,7 +194,7 @@ This section paints a clear picture of how media queries are employed within the
 1. [VScode](https://code.visualstudio.com/)
    -  The application was developed and executed using Visual Studio Code as the preferred Integrated Development Environment (IDE).
 1. [Netlify](https://www.netlify.com/)
-  Netlify was utilized for seamless deployment and to host the live version of the page.
+   - Netlify was utilized for seamless deployment and to host the live version of the page.
 
 ## Testing
 
