@@ -265,6 +265,8 @@ Thanks to my Mentor for not checking even once, the time he was contacted, he di
 
 Gratitude to fellow Code Institute students and alumni for their assistance.
 
+I'd like to extend my sincere gratitude to Manu Perez and Pasquale for their invaluable support and mentorship at Bristol College.
+
 Many thanks to the tutors and staff at the Code Institute for their unwavering support.
 
 A special thanks to the Code Institute London Community for their continuous encouragement and technical insights.
