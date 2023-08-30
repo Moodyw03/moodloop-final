@@ -99,9 +99,10 @@ body {
 #showModalBtn {
   font-size: 10px;
   margin: 30px;
+  margin-left: -10px;
   width: 80px;
   height: 80px;
-  background-color: rgb(32, 45, 219);
+  background-color: rgb(219, 110, 32);
   border-radius: 50%;
   color: #fcfdff;
 }
@@ -114,6 +115,7 @@ body {
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 73%;
 }
 
 .close-btn {
@@ -402,6 +404,8 @@ input[type=submit] {
   .boxsynth {
     margin: 5px 0px;
   }
+
+
 }
 
 @media only screen and (max-width: 600px) {
@@ -458,6 +462,20 @@ input[type=submit] {
     display: flex;
 
   }
+
+
+
+  #showModalBtn {
+    font-size: 10px;
+    margin: 30px;
+    margin-left: -5px;
+    width: 80px;
+    height: 80px;
+    background-color: rgb(219, 110, 32);
+    border-radius: 50%;
+    color: #fcfdff;
+  }
+
 
   /*.draggableContainer {
   width: 100%;
