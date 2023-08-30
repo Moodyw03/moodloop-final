@@ -352,4 +352,11 @@ document.getElementById("treble").addEventListener("input", function (event) {
     });
 });
 
+document.getElementById('showModalBtn').addEventListener('click', function () {
+    document.getElementById('myModal').style.display = 'block';
+});
+
+document.getElementById('closeModalBtn').addEventListener('click', function () {
+    document.getElementById('myModal').style.display = 'none';
+});
 
