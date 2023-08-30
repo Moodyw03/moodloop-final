@@ -86,6 +86,15 @@ body {
   margin-top: 0px;
 }
 
+#moodLoopInstructions {
+  width: 100%;
+  max-height: 200px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .wrapper button {
   font-size: 10px;
   margin: 30px;
