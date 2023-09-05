@@ -45,6 +45,7 @@ An attempt to test with Jest was made, however, it seemed not compatible with "v
 - There's a noticeable millisecond delay at the conclusion of each loop, attributable to the buffer of the Web Audio API. It appears this buffer isn't sufficiently robust to manage 4 players seamlessly.
 
 - Occasionally, upon selecting the "pre-listen" option, certain audio files exhibit a reduced volume.
+- I attempted to integrate an audio-reactive visual within the drop zone. However, compatibility issues arose with the API I was using, primarily because it required the use of four simultaneous audio buffers. Further complicating matters, the implementation necessitated the use of p5.js, which made it unfeasible.
     
   
 
