@@ -15,7 +15,7 @@ This submission represents Milestone Project 2 for the Code Institute's Diploma 
 
 <div align="center">
 
-<a href="https://ibb.co/ZLLWz7R"><img src="https://i.ibb.co/2nng3H0/moodloop-mockup.jpg" alt="moodloop-mockup" border="0"></a>
+<a href="[https://ibb.co/ZLLWz7R]"><img src="https://i.ibb.co/2nng3H0/moodloop-mockup.jpg" alt="moodloop-mockup" border="0"></a>
 
 </div>
 
