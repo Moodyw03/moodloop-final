@@ -4,11 +4,12 @@ body {
   margin: auto;
   font-family: "Roboto Mono", monospace;
   overflow: auto;
-  background: linear-gradient(351deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgb(103, 103, 222) 50%,
-      rgba(0, 0, 0, 1) 100%);
-
+  background: linear-gradient(
+    351deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgb(103, 103, 222) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
   background-size: 400% 400%;
   background-attachment: fixed;
   animation: gradient 15s ease infinite;
@@ -59,7 +60,6 @@ body {
 
 .navbar {
   position: relative;
-
 }
 
 .navbar-brand img {
@@ -133,7 +133,6 @@ body {
   top: 5px;
   cursor: pointer;
 }
-
 
 .knob {
   position: relative;
@@ -231,7 +230,6 @@ body {
 .fileName {
   width: 50%;
   margin-top: 10px;
-
 }
 
 .controls {
@@ -281,63 +279,74 @@ body {
   color: rgb(248, 248, 71);
 }
 
+/* Footer Styling */
 .footermood {
   color: #fcfdff;
+  padding: 20px;
+  background-color: transparent; /* Adjust as needed */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 5px;
-  margin-left: 10px;
 }
 
 .footermood h2 {
   font-size: 10px;
 }
 
-
-input[type=email] {
-  width: 65%;
-  padding: 5px 0px;
-  font-size: 10px;
-  color: #fdfdff;
-  background-color: #272d3644;
-  border: none;
+.footermood .input-group {
+  max-width: 400px;
+  margin: 0 auto; /* Center the input group */
 }
 
-input[type=email]::placeholder {
-
-  color: #fdfdff;
-
-}
-
-
-
-
-input[type=submit] {
-  width: 30%;
-  padding: 5px 0px;
-  font-size: 10px;
-  margin-left: -10px;
+.footermood .form-control {
   background-color: #272d3644;
   color: #fcfdff;
   border: none;
+  height: 48px; /* Set desired height */
+  padding: 0 12px;
+  font-size: 16px;
+}
+
+.footermood .form-control::placeholder {
+  color: #fdfdff;
+}
+
+.footermood .btn {
+  background-color: #272d3644;
+  color: #fcfdff;
+  border: none;
+  height: 48px; /* Match height with input */
+  padding: 0 16px;
+  font-size: 16px;
+}
+
+.footermood .btn:hover {
+  background-color: #3a3f47;
+}
+
+/* Remove default outline on input and button focus */
+.footermood .form-control:focus,
+.footermood .btn:focus {
+  box-shadow: none;
+  outline: none;
 }
 
 .social {
-  display: flex;
-  align-items: center;
-
+  margin-top: 20px;
 }
 
 .social a {
-  margin: 0px 5px;
   color: #fcfdff;
+  font-size: 24px; /* Adjust icon size */
+  margin: 0 10px;
 }
 
-.foot {
-  width: 30%;
-  margin-left: 70px;
+.social a:hover {
+  color: #007bff;
+}
 
+.social .d-flex {
+  justify-content: center;
 }
 
 .testy {
@@ -349,21 +358,10 @@ input[type=submit] {
   color: #fcfdff;
   margin-left: 25px;
 }
-/* Adjust the width of the input field */
-.footermood .form-control {
-  width: 250px; /* Set desired width */
-}
-
-/* Adjust the button */
-.footermood .btn {
-  /* Optional custom styling */
-}
-
 
 /* Media Queries
 ================================================== */
 @media only screen and (max-width: 1366px) {
-
   .testy {
     display: inline-block;
   }
@@ -391,13 +389,11 @@ input[type=submit] {
 @media only screen and (max-width: 1024px) {
   #drop_zone {
     margin-top: 150px;
-
   }
 
   .testy {
     display: inline-block;
   }
-
 }
 
 @media only screen and (max-width: 992px) {
@@ -423,8 +419,6 @@ input[type=submit] {
   .boxsynth {
     margin: 5px 0px;
   }
-
-
 }
 
 @media only screen and (max-width: 600px) {
@@ -459,30 +453,23 @@ input[type=submit] {
   #drop_zone {
     height: 100px;
     width: 100px;
-
     line-height: 100px;
-
     margin: 100px auto 0 auto;
   }
 
   .mainbox {
-
     flex-direction: column;
     margin-top: 100px;
   }
 
   #eqControls {
-
     margin-top: 30px;
   }
 
   .audiofile {
     flex-direction: column;
     display: flex;
-
   }
-
-
 
   #showModalBtn {
     font-size: 10px;
@@ -524,43 +511,14 @@ input[type=submit] {
 
   .controls i {
     pointer-events: none;
-}
-
-
-
-  /*.draggableContainer {
-  width: 100%;
-  height: auto;
-  border: 2px solid #000;
-  padding: 5px;
-  cursor: move;
-  display: flex;
-  align-items: center;
-  justify-content:center;
-  flex-direction: column;
-}
-.controls {
-  width: 100%;
-  text-align: center;
-}
-.filename { 
-  width: 100%;
-  text-align: center;
-}
-*/
+  }
 
   .foot {
     width: 80%;
     margin-left: 0px;
   }
-
-
 }
 
-/* Media Queries
-    ================================================== */
-
-
 @media screen and (min-width: 420px) {
-  /* .vz-wrapper { box-shadow: inset 0 0 200px 60px #000; } */
+  /* Additional media queries if needed */
 }
