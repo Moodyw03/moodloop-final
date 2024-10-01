@@ -1201,26 +1201,47 @@
     <footer>
       <div class="footermood">
         <div class="row foot">
-          <div class="col">
-            <form>
-
-              <input type="email" placeholder="email">
-              <input type="submit" value="send">
+          <!-- Email Sign-Up Form -->
+          <div class="col text-center">
+            <form name="email-signup" netlify class="d-inline-block">
+              <div class="d-flex align-items-center">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                  class="form-control me-2"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                >
+                  Subscribe
+                </button>
+              </div>
             </form>
           </div>
-          <div class="col social">
-            <a href="https://www.instagram.com/moody_waters/" target="_blank"><i
-                class="fa-brands fa-instagram"></i></a>
-            <a href="https://www.facebook.com/profile.php?id=100063696242130"
-              target="_blank"><i class="fa-brands fa-facebook"></i></a>
-            <a href="https://www.tiktok.com/@moodyeffects" target="_blank"><i
-                class="fa-brands fa-tiktok"></i></a>
-            <a href="https://github.com/Moodyw03" target="_blank"><i
-                class="fa-brands fa-github"></i></a>
+          <!-- Social Media Icons -->
+          <div class="col social text-center">
+            <div class="d-flex justify-content-center">
+              <a href="https://www.instagram.com/moody_waters/" target="_blank" class="mx-2">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+              <a href="https://www.facebook.com/profile.php?id=100063696242130" target="_blank" class="mx-2">
+                <i class="fa-brands fa-facebook"></i>
+              </a>
+              <a href="https://www.tiktok.com/@moodyeffects" target="_blank" class="mx-2">
+                <i class="fa-brands fa-tiktok"></i>
+              </a>
+              <a href="https://github.com/Moodyw03" target="_blank" class="mx-2">
+                <i class="fa-brands fa-github"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </footer>
+    
 
     <script src="main.js"></script>
   </body>

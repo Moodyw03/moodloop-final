@@ -349,6 +349,16 @@ input[type=submit] {
   color: #fcfdff;
   margin-left: 25px;
 }
+/* Adjust the width of the input field */
+.footermood .form-control {
+  width: 250px; /* Set desired width */
+}
+
+/* Adjust the button */
+.footermood .btn {
+  /* Optional custom styling */
+}
+
 
 /* Media Queries
 ================================================== */
