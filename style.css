@@ -512,6 +512,11 @@ input[type=submit] {
     width: 73%;
   }
 
+  .controls i {
+    pointer-events: none;
+}
+
+
 
   /*.draggableContainer {
   width: 100%;
