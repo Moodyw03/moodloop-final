@@ -86,26 +86,34 @@ let masterScheduler = {
 
 // Initialize Web Audio API with proper settings for best performance
 function initAudio() {
-  // Create a new AudioContext with larger buffer size for stability
-  context = new (window.AudioContext || window.webkitAudioContext)({
-    latencyHint: "playback",
-    sampleRate: 44100,
-  });
+  try {
+    // Create a new AudioContext with larger buffer size for stability
+    context = new (window.AudioContext || window.webkitAudioContext)({
+      latencyHint: "playback",
+      sampleRate: 44100,
+    });
 
-  // Create master gain node
-  masterGainNode = context.createGain();
-  masterGainNode.gain.value = 1;
-  masterGainNode.connect(context.destination);
+    // Create master gain node
+    masterGainNode = context.createGain();
+    masterGainNode.gain.value = 1;
+    masterGainNode.connect(context.destination);
 
-  // Ensure audio context is running
-  unlockAudioContext(context);
+    // Ensure audio context is running
+    unlockAudioContext(context);
 
-  // Setup periodic check to ensure audio context stays running
-  setInterval(() => {
-    if (context.state !== "running") {
-      context.resume().catch((e) => console.log("Error resuming context:", e));
-    }
-  }, 500);
+    // Setup periodic check to ensure audio context stays running
+    setInterval(() => {
+      if (context.state !== "running") {
+        context
+          .resume()
+          .catch((e) => console.log("Error resuming context:", e));
+      }
+    }, 500);
+
+    console.log("Audio system initialized successfully");
+  } catch (error) {
+    console.error("Error initializing audio system:", error);
+  }
 }
 
 function unlockAudioContext(audioContext) {
@@ -130,6 +138,7 @@ function unlockAudioContext(audioContext) {
     events.forEach((event) => {
       document.body.removeEventListener(event, unlockOnEvent);
     });
+    console.log("Audio context unlocked by user interaction");
   };
 
   events.forEach((event) => {
@@ -168,15 +177,47 @@ function simulateDragToDropzone(event) {
     src: container.dataset.audio,
     list: container.dataset.list,
   };
-  // Mimic the behavior of your drop event handler
-  if (currentlyPlaying[data.list].source) {
-    currentlyPlaying[data.list].source.stop();
-  }
 
-  if (data.src) {
-    loadAudio(data.src, data.list).then(() => {
-      playAudio(data.list);
-    });
+  // Handle clicks on audio files more reliably
+  handleAudioSelection(data.src, data.list);
+}
+
+// New consolidated function to handle audio selection from both drop and click
+async function handleAudioSelection(file, list) {
+  try {
+    console.log(`Loading audio: ${file} for track: ${list}`);
+
+    // If there's currently playing audio for this track, stop it first
+    if (currentlyPlaying[list].source) {
+      try {
+        currentlyPlaying[list].source.stop();
+        currentlyPlaying[list].source = null;
+      } catch (e) {
+        console.log("Error stopping previous source:", e);
+      }
+    }
+
+    // Ensure audio context is running before proceeding
+    if (context.state !== "running") {
+      await context.resume();
+      console.log("Audio context resumed");
+    }
+
+    // Load the audio file
+    const loadSuccess = await loadAudio(file, list);
+
+    if (loadSuccess) {
+      // Short timeout to ensure everything is ready
+      setTimeout(() => {
+        playAudio(list);
+        console.log(`Successfully started playback for ${list}`);
+      }, 50);
+    } else {
+      console.error(`Failed to load audio for ${list}`);
+      // Optionally add retry logic here
+    }
+  } catch (error) {
+    console.error("Error in handleAudioSelection:", error);
   }
 }
 
@@ -200,152 +241,238 @@ $(function () {
     e.stopPropagation();
     $(this).removeClass("drag-over");
 
-    var data = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
-    var file = data.src;
-    list = data.list;
+    try {
+      var data = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
+      var file = data.src;
+      list = data.list;
 
-    if (currentlyPlaying[list].source) {
-      currentlyPlaying[list].source.stop();
-    }
-
-    if (file) {
-      await loadAudio(file, list);
-      playAudio(list);
+      if (file) {
+        handleAudioSelection(file, list);
+      }
+    } catch (error) {
+      console.error("Error in drop event:", error);
     }
   });
 });
 
 async function loadAudio(url, list) {
-  try {
-    let response = await fetch(url);
-    let arrayBuffer = await response.arrayBuffer();
+  let retryCount = 0;
+  const maxRetries = 2;
 
-    // Use promise for decoding to handle errors better
-    let audioData = await new Promise((resolve, reject) => {
-      context.decodeAudioData(arrayBuffer, resolve, reject);
-    });
+  while (retryCount <= maxRetries) {
+    try {
+      console.log(
+        `Attempting to load audio (attempt ${retryCount + 1}): ${url}`
+      );
 
-    // Check for silence at the beginning or end of the buffer
-    checkForSilence(audioData);
+      // Ensure audio context is running
+      if (context.state !== "running") {
+        await context.resume();
+      }
 
-    // Update BPM if this is the first track loaded
-    if (Object.values(audioBuffers).filter(Boolean).length === 0) {
-      updateBPMFromBuffer(audioData);
+      let response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch: ${response.status} ${response.statusText}`
+        );
+      }
+
+      let arrayBuffer = await response.arrayBuffer();
+      if (!arrayBuffer || arrayBuffer.byteLength === 0) {
+        throw new Error("Received empty array buffer");
+      }
+
+      // Use promise for decoding to handle errors better
+      let audioData = await new Promise((resolve, reject) => {
+        context.decodeAudioData(arrayBuffer, resolve, (err) =>
+          reject(
+            new Error(`Decoding error: ${err?.message || "Unknown error"}`)
+          )
+        );
+      });
+
+      // Check for valid audio data
+      if (!audioData || audioData.duration === 0) {
+        throw new Error("Invalid audio data (zero duration)");
+      }
+
+      // Check for silence at the beginning or end of the buffer
+      checkForSilence(audioData);
+
+      // Update BPM if this is the first track loaded
+      if (Object.values(audioBuffers).filter(Boolean).length === 0) {
+        updateBPMFromBuffer(audioData);
+      }
+
+      audioBuffers[list] = audioData;
+      currentListOfAudioInDZ[list] = url;
+
+      // Remove the "selected" class from all files in this category
+      $(`.draggableContainer[data-list='${list}']`).removeClass("selected");
+
+      // Add the "selected" class to the selected file
+      const fileContainer = $(`div[data-audio='${url}']`);
+      fileContainer.addClass("selected");
+
+      console.log(`Successfully loaded audio for ${list}`);
+      return true;
+    } catch (error) {
+      console.error(`Error loading audio (attempt ${retryCount + 1}):`, error);
+      retryCount++;
+
+      if (retryCount > maxRetries) {
+        console.error(
+          `Failed to load audio after ${maxRetries} attempts:`,
+          error
+        );
+        return false;
+      }
+
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, 300));
     }
-
-    audioBuffers[list] = audioData;
-    currentListOfAudioInDZ[list] = url;
-
-    // Remove the "selected" class from all files in this category
-    $(`.draggableContainer[data-list='${list}']`).removeClass("selected");
-
-    // Add the "selected" class to the selected file
-    const fileContainer = $(`div[data-audio='${url}']`);
-    fileContainer.addClass("selected");
-
-    return true;
-  } catch (error) {
-    console.error("Error loading audio:", error);
-    return false;
   }
+
+  return false;
 }
 
 function playAudio(list) {
-  // If we don't have a buffer yet, exit
-  if (!audioBuffers[list]) {
-    console.error("No audio buffer found for", list);
-    return;
-  }
-
-  // Highlight the file name when playing starts
-  updateFileHighlight(list, true);
-
-  // Make sure context is running
-  if (context.state !== "running") {
-    console.log("Resuming audio context...");
-    context.resume().catch((e) => console.error("Error resuming context:", e));
-  }
-
-  // If there was a previous source, stop it properly
-  if (currentlyPlaying[list].source) {
-    try {
-      currentlyPlaying[list].source.stop();
-    } catch (e) {
-      console.log("Error stopping previous source:", e);
+  try {
+    // If we don't have a buffer yet, exit
+    if (!audioBuffers[list]) {
+      console.error("No audio buffer found for", list);
+      return;
     }
-    currentlyPlaying[list].source = null;
+
+    console.log(
+      `Starting playback for ${list} (buffer duration: ${audioBuffers[
+        list
+      ].duration.toFixed(3)}s)`
+    );
+
+    // Highlight the file name when playing starts
+    updateFileHighlight(list, true);
+
+    // Make sure context is running
+    if (context.state !== "running") {
+      console.log("Resuming audio context...");
+      context
+        .resume()
+        .catch((e) => console.error("Error resuming context:", e));
+    }
+
+    // If there was a previous source, stop it properly
+    if (currentlyPlaying[list].source) {
+      try {
+        currentlyPlaying[list].source.stop();
+      } catch (e) {
+        console.log("Error stopping previous source:", e);
+      }
+      currentlyPlaying[list].source = null;
+    }
+
+    // Create and set up gain node if it doesn't exist
+    let gainNode;
+    if (currentlyPlaying[list].gainNode) {
+      gainNode = currentlyPlaying[list].gainNode;
+      // Reset any scheduled values
+      gainNode.gain.cancelScheduledValues(context.currentTime);
+      gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
+    } else {
+      gainNode = context.createGain();
+      gainNode.gain.value = isMuted[list] ? 0 : 1;
+    }
+
+    // Check if the EQ settings for this list exist and create if needed
+    if (!eqSettings[list].bass) {
+      createEQ(list);
+    }
+
+    // If no audio is playing yet, start the master scheduler
+    if (firstStartTime === null) {
+      startMasterScheduler();
+      console.log("Master scheduler started at time:", context.currentTime);
+    }
+
+    // Store the gain node reference
+    currentlyPlaying[list].gainNode = gainNode;
+
+    // Connect to analyzer for visualization if exists
+    if (!masterAnalyser) {
+      initializeVisualization();
+    }
+
+    // Calculate current position in the loop
+    let currentLoopPosition = 0;
+    if (firstStartTime !== null) {
+      const elapsedTime = context.currentTime - firstStartTime;
+      currentLoopPosition = elapsedTime % loopLengthSeconds;
+      console.log(`Current loop position: ${currentLoopPosition.toFixed(3)}s`);
+    }
+
+    // Calculate the next exact bar boundary to start playback
+    // Add a small scheduling delay (5ms) for better reliability
+    const schedulingDelay = 0.005;
+    const timeToNextBar =
+      barLengthSeconds - (currentLoopPosition % barLengthSeconds);
+    const startTime = context.currentTime + timeToNextBar + schedulingDelay;
+
+    // Schedule the audio to start exactly on the bar boundary
+    const source = context.createBufferSource();
+    source.buffer = audioBuffers[list];
+
+    // Make sure we have a valid buffer
+    if (!source.buffer) {
+      throw new Error(`Buffer for ${list} is invalid`);
+    }
+
+    // Connect the source to the audio chain
+    if (eqSettings[list].bass) {
+      source.connect(eqSettings[list].bass);
+      eqSettings[list].bass.connect(eqSettings[list].mid);
+      eqSettings[list].mid.connect(eqSettings[list].treble);
+      eqSettings[list].treble.connect(gainNode);
+    } else {
+      source.connect(gainNode);
+    }
+
+    // Connect gain node to outputs
+    gainNode.connect(masterAnalyser || context.destination);
+    gainNode.connect(masterGainNode);
+
+    // Calculate the exact offset in the buffer to start playback
+    const startOffset =
+      (currentLoopPosition + timeToNextBar) % loopLengthSeconds;
+
+    // Start the source at the calculated time and offset
+    source.start(startTime, startOffset);
+
+    console.log(
+      `Started ${list} at time ${startTime.toFixed(
+        3
+      )}, offset ${startOffset.toFixed(3)}`
+    );
+
+    // Store the source reference
+    currentlyPlaying[list].source = source;
+
+    // Monitor for errors - if source ends unexpectedly, restart it
+    source.onended = (event) => {
+      // Only handle unexpected endings (not when stop() was called)
+      if (currentlyPlaying[list].source === source) {
+        console.log(`Source for ${list} ended unexpectedly, restarting`);
+        // Give a short delay before restarting
+        setTimeout(() => {
+          if (currentlyPlaying[list].source === source) {
+            currentlyPlaying[list].source = null;
+            playAudio(list);
+          }
+        }, 100);
+      }
+    };
+  } catch (error) {
+    console.error("Error in playAudio:", error);
   }
-
-  // Create and set up gain node if it doesn't exist
-  let gainNode;
-  if (currentlyPlaying[list].gainNode) {
-    gainNode = currentlyPlaying[list].gainNode;
-    // Reset any scheduled values
-    gainNode.gain.cancelScheduledValues(context.currentTime);
-    gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
-  } else {
-    gainNode = context.createGain();
-    gainNode.gain.value = isMuted[list] ? 0 : 1;
-  }
-
-  // Check if the EQ settings for this list exist and create if needed
-  if (!eqSettings[list].bass) {
-    createEQ(list);
-  }
-
-  // If no audio is playing yet, start the master scheduler
-  if (firstStartTime === null) {
-    startMasterScheduler();
-  }
-
-  // Store the gain node reference
-  currentlyPlaying[list].gainNode = gainNode;
-
-  // Connect to analyzer for visualization if exists
-  if (!masterAnalyser) {
-    initializeVisualization();
-  }
-
-  // Calculate current position in the loop
-  let currentLoopPosition = 0;
-  if (firstStartTime !== null) {
-    const elapsedTime = context.currentTime - firstStartTime;
-    currentLoopPosition = elapsedTime % loopLengthSeconds;
-  }
-
-  // Calculate the next exact bar boundary to start playback
-  const timeToNextBar =
-    barLengthSeconds - (currentLoopPosition % barLengthSeconds);
-  const startTime = context.currentTime + timeToNextBar;
-
-  // Schedule the audio to start exactly on the bar boundary
-  const source = context.createBufferSource();
-  source.buffer = audioBuffers[list];
-
-  // Connect the source to the audio chain
-  if (eqSettings[list].bass) {
-    source.connect(eqSettings[list].bass);
-    eqSettings[list].bass.connect(eqSettings[list].mid);
-    eqSettings[list].mid.connect(eqSettings[list].treble);
-    eqSettings[list].treble.connect(gainNode);
-  } else {
-    source.connect(gainNode);
-  }
-
-  // Connect gain node to outputs
-  gainNode.connect(masterAnalyser || context.destination);
-  gainNode.connect(masterGainNode);
-
-  // Calculate the exact offset in the buffer to start playback
-  const startOffset = (currentLoopPosition + timeToNextBar) % loopLengthSeconds;
-
-  // Start the source at the calculated time and offset
-  source.start(startTime, startOffset);
-
-  console.log(`Started ${list} at time ${startTime}, offset ${startOffset}`);
-
-  // Store the source reference
-  currentlyPlaying[list].source = source;
 }
 
 function resumeAudio(list) {
