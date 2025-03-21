@@ -1,4 +1,12 @@
 let context = new AudioContext();
+let scheduledSources = {}; // Track scheduled audio sources
+
+// Add lookahead scheduling constants
+const LOOKAHEAD = 0.1; // 100ms lookahead
+const SCHEDULE_AHEAD_TIME = 0.2; // Schedule 200ms ahead
+
+// Buffer size to reduce stuttering
+const BUFFER_SIZE = 2048;
 
 let currentlyPlaying = {
   rhythm: { source: null, gainNode: null },
@@ -49,16 +57,23 @@ let list;
 let isSolo = false;
 
 function unlockAudioContext(audioContext) {
-  if (audioContext.state === "suspended" && "ontouchstart" in window) {
+  if (audioContext.state === "suspended") {
     const unlock = async () => {
       await audioContext.resume();
 
+      // Change buffer size for better performance
+      if (audioContext.state === "running") {
+        console.log("AudioContext is now running");
+      }
+
       document.body.removeEventListener("touchstart", unlock);
       document.body.removeEventListener("touchend", unlock);
+      document.body.removeEventListener("mousedown", unlock);
     };
 
     document.body.addEventListener("touchstart", unlock, false);
     document.body.addEventListener("touchend", unlock, false);
+    document.body.addEventListener("mousedown", unlock, false); // Add mouse event for better handling
   }
 }
 
@@ -175,11 +190,33 @@ function playAudio(list) {
   }
 
   const loopDuration = source.buffer.duration;
-  const offset = (context.currentTime - firstStartTime) % loopDuration;
-  source.start(0, offset);
+
+  // Calculate a precise offset that aligns with buffer boundaries
+  const currentTime = context.currentTime;
+  const timeSinceStart = currentTime - firstStartTime;
+  const offset = timeSinceStart % loopDuration;
+
+  // Use a small delay to ensure proper buffering before playback
+  const startTime = currentTime + 0.005; // 5ms delay for buffer preparation
+  source.start(startTime, offset);
+
+  // If there was a previous source, schedule its end to match the new source start
+  if (currentlyPlaying[list].source) {
+    currentlyPlaying[list].source.stop(startTime);
+  }
 
   currentlyPlaying[list].source = source;
   currentlyPlaying[list].gainNode = gainNode; // Save the gain node
+
+  // Store this source in our scheduled sources
+  scheduledSources[list] = source;
+
+  // Add event listener for when the source ends
+  source.onended = () => {
+    if (scheduledSources[list] === source) {
+      delete scheduledSources[list];
+    }
+  };
 }
 
 function pauseAudio(list) {
@@ -233,16 +270,29 @@ function resumeAudio(list) {
     if (firstStartTime === null) {
       firstStartTime = context.currentTime;
     }
-    // Calculate the offset based on the pause time and the first start time
-    let offset = pauseTime[list] - (firstStartTime - context.currentTime);
 
-    // Start the audio from the pause time
-    source.start(0, offset);
+    // Calculate a more precise offset
+    const loopDuration = source.buffer.duration;
+    let offset = pauseTime[list] % loopDuration;
+
+    // Small delay to ensure buffer preparation
+    const startTime = context.currentTime + 0.005;
+    source.start(startTime, offset);
 
     // Reset the pause state
     paused[list] = false;
     pauseTime[list] = 0;
     currentlyPlaying[list].source = source;
+
+    // Store this source in our scheduled sources
+    scheduledSources[list] = source;
+
+    // Add event listener for when the source ends
+    source.onended = () => {
+      if (scheduledSources[list] === source) {
+        delete scheduledSources[list];
+      }
+    };
   }
 }
 
@@ -400,3 +450,12 @@ document.getElementById("showModalBtn").addEventListener("click", function () {
 document.getElementById("closeModalBtn").addEventListener("click", function () {
   document.getElementById("myModal").style.display = "none";
 });
+
+// Check if the audio context gets suspended and resume it
+setInterval(() => {
+  if (context.state === "suspended") {
+    context.resume().then(() => {
+      console.log("AudioContext resumed successfully");
+    });
+  }
+}, 1000); // Check every second
