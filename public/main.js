@@ -540,13 +540,18 @@ function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
     (item) => item.source !== null
   );
 
+  // Get current time for color animations
+  const time = Date.now() / 1000;
+
   // If nothing is playing, draw a static circle
   if (!isPlaying) {
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw pulsing circle
-    const time = Date.now() / 1000;
+    // Draw pulsing circle with shifting colors
     const pulse = Math.sin(time * 2) * 0.1 + 0.9; // Value between 0.8 and 1.0
+
+    // Shift hue over time for idle animation
+    const idleHue = (time * 15) % 360;
 
     canvasCtx.beginPath();
     canvasCtx.arc(
@@ -558,7 +563,7 @@ function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
       false
     );
     canvasCtx.lineWidth = 2;
-    canvasCtx.strokeStyle = "rgba(103, 103, 222, 0.5)";
+    canvasCtx.strokeStyle = `hsla(${idleHue}, 80%, 60%, 0.5)`;
     canvasCtx.stroke();
 
     animationFrameId = requestAnimationFrame(() =>
@@ -578,14 +583,19 @@ function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
   const centerY = canvas.height / 2;
   const radius = Math.min(centerX, centerY) - 10;
 
+  // Draw background circle with shifting color
+  const bgHue = (time * 10) % 360;
   canvasCtx.beginPath();
   canvasCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
   canvasCtx.lineWidth = 1;
-  canvasCtx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+  canvasCtx.strokeStyle = `hsla(${bgHue}, 70%, 60%, 0.15)`;
   canvasCtx.stroke();
 
   // Draw frequency bars in circular pattern
   const barCount = bufferLength / 2;
+
+  // Create a color offset that shifts over time
+  const colorOffset = Math.sin(time * 0.5) * 100;
 
   for (let i = 0; i < barCount; i++) {
     const angle = (i / barCount) * 2 * Math.PI;
@@ -606,9 +616,35 @@ function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
     canvasCtx.lineTo(endX, endY);
     canvasCtx.lineWidth = 2;
 
-    // Create color gradient based on frequency
-    const hue = (i / barCount) * 240; // from blue to purple
-    canvasCtx.strokeStyle = `hsla(${hue}, 80%, 60%, ${0.5 + amplitude * 0.5})`;
+    // Create more quirky color patterns
+    // Use a wider range of colors and patterns based on position and time
+    let hue;
+
+    // Choose color pattern based on time
+    const colorPattern = Math.floor(time / 5) % 4;
+
+    switch (colorPattern) {
+      case 0: // Rainbow spiral
+        hue = ((i / barCount) * 360 + time * 30) % 360;
+        break;
+      case 1: // Complementary colors
+        hue = ((i % 2) * 180 + time * 20) % 360;
+        break;
+      case 2: // Frequency-based with offset
+        hue = ((i / barCount) * 180 + colorOffset + amplitude * 100) % 360;
+        break;
+      case 3: // Psychedelic pattern
+        hue = ((angle * 180) / Math.PI + time * 50) % 360;
+        break;
+    }
+
+    // Vary saturation and lightness based on amplitude for more vibrancy
+    const saturation = 80 + amplitude * 20; // 80-100%
+    const lightness = 50 + amplitude * 20; // 50-70%
+
+    canvasCtx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${
+      0.6 + amplitude * 0.4
+    })`;
     canvasCtx.stroke();
   }
 
