@@ -697,7 +697,7 @@ document.getElementById("closeModalBtn").addEventListener("click", function () {
 function initializeVisualization() {
   if (!masterAnalyser) {
     masterAnalyser = context.createAnalyser();
-    masterAnalyser.fftSize = 256;
+    masterAnalyser.fftSize = 512; // Increased for better resolution
     masterAnalyser.connect(context.destination);
   }
 
@@ -712,11 +712,212 @@ function initializeVisualization() {
   const bufferLength = masterAnalyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
 
+  // Create particle system for visualization
+  const particles = createParticles(canvas.width, canvas.height, 75); // Create 75 particles
+
   // Start animation loop if not already running
   if (!visualizationActive) {
     visualizationActive = true;
-    animateVisualization(canvasCtx, canvas, dataArray, bufferLength);
+    animateVisualization(canvasCtx, canvas, dataArray, bufferLength, particles);
   }
+}
+
+// Create a particle system
+function createParticles(width, height, count) {
+  const particles = [];
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 4 + 1,
+      color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+      velocity: {
+        x: Math.random() * 1 - 0.5,
+        y: Math.random() * 1 - 0.5,
+      },
+      amplitude: 0,
+    });
+  }
+  return particles;
+}
+
+// Enhanced visualization function
+function animateVisualization(
+  canvasCtx,
+  canvas,
+  dataArray,
+  bufferLength,
+  particles
+) {
+  // Check if any tracks are playing
+  const isPlaying = Object.values(currentlyPlaying).some(
+    (item) => item.source !== null
+  );
+
+  const time = Date.now() / 1000;
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+
+  // Clear the canvas with semi-transparent black for motion blur effect
+  canvasCtx.fillStyle = "rgba(0, 0, 0, 0.15)";
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Different animation when idle vs playing
+  if (!isPlaying) {
+    // Idle animation with flowing particles only
+    updateParticlesIdle(particles, canvas.width, canvas.height, time);
+    drawParticles(canvasCtx, particles, time);
+  } else {
+    try {
+      // Active audio visualization
+      masterAnalyser.getByteFrequencyData(dataArray);
+
+      // Get amplitude data for different frequency bands
+      const bassLevel = getFrequencyBandLevel(dataArray, 0, 5) / 255;
+      const midLevel = getFrequencyBandLevel(dataArray, 6, 20) / 255;
+      const highLevel = getFrequencyBandLevel(dataArray, 21, 50) / 255;
+
+      // Update and draw particles based on audio
+      updateParticles(
+        particles,
+        canvas.width,
+        canvas.height,
+        bassLevel,
+        midLevel,
+        highLevel
+      );
+      drawParticles(canvasCtx, particles, time);
+    } catch (e) {
+      console.error("Visualization error:", e);
+    }
+  }
+
+  // Continue animation loop
+  animationFrameId = requestAnimationFrame(() =>
+    animateVisualization(canvasCtx, canvas, dataArray, bufferLength, particles)
+  );
+}
+
+// New function to update particles in idle mode
+function updateParticlesIdle(particles, width, height, time) {
+  particles.forEach((particle) => {
+    // Gentle circular motion
+    particle.x += Math.sin(time + particle.radius) * 0.3;
+    particle.y += Math.cos(time + particle.radius) * 0.3;
+
+    // Keep particles within bounds
+    if (particle.x < 0) particle.x = width;
+    if (particle.x > width) particle.x = 0;
+    if (particle.y < 0) particle.y = height;
+    if (particle.y > height) particle.y = 0;
+
+    // Add a gentle pulsing effect
+    particle.radius = 1 + Math.sin(time * 2 + particle.x) * 0.5;
+    particle.amplitude = 0.2 + Math.sin(time + particle.y) * 0.1;
+  });
+}
+
+// Draw idle animation
+function drawIdleAnimation(canvasCtx, canvas, time, particles) {
+  // Update and draw particles with gentle motion
+  updateParticlesIdle(particles, canvas.width, canvas.height, time);
+  drawParticles(canvasCtx, particles, time);
+}
+
+// Get average level of a frequency band
+function getFrequencyBandLevel(dataArray, startBin, endBin) {
+  let sum = 0;
+  for (let i = startBin; i <= endBin; i++) {
+    sum += dataArray[i];
+  }
+  return sum / (endBin - startBin + 1);
+}
+
+// Update particles based on audio
+function updateParticles(
+  particles,
+  width,
+  height,
+  bassLevel,
+  midLevel,
+  highLevel
+) {
+  particles.forEach((particle) => {
+    // Bass affects particle size
+    particle.radius = particle.radius * 0.95 + (2 + bassLevel * 5) * 0.05;
+
+    // Mids affect particle speed
+    const speed = 1 + midLevel * 4;
+    particle.x += particle.velocity.x * speed;
+    particle.y += particle.velocity.y * speed;
+
+    // High frequencies affect particle direction
+    if (Math.random() < highLevel * 0.3) {
+      particle.velocity.x = Math.random() * 2 - 1;
+      particle.velocity.y = Math.random() * 2 - 1;
+    }
+
+    // Keep particles within bounds with wraparound
+    if (particle.x < 0) particle.x = width;
+    if (particle.x > width) particle.x = 0;
+    if (particle.y < 0) particle.y = height;
+    if (particle.y > height) particle.y = 0;
+
+    // Store amplitude for drawing
+    particle.amplitude = bassLevel * 0.5 + midLevel * 0.3 + highLevel * 0.2;
+  });
+}
+
+// Draw particles
+function drawParticles(canvasCtx, particles, time) {
+  particles.forEach((particle) => {
+    canvasCtx.beginPath();
+    canvasCtx.arc(
+      particle.x,
+      particle.y,
+      particle.radius * 2,
+      0,
+      Math.PI * 2,
+      false
+    );
+
+    // Glow effect with just white and blue shades
+    const glow = 1 + particle.amplitude * 5;
+
+    // Create gradient for each particle
+    const gradient = canvasCtx.createRadialGradient(
+      particle.x,
+      particle.y,
+      0,
+      particle.x,
+      particle.y,
+      particle.radius * 2 * glow
+    );
+
+    // Calculate blue intensity based on amplitude
+    const blueIntensity = Math.round(180 + particle.amplitude * 75);
+
+    // White core, blue outer glow
+    gradient.addColorStop(
+      0,
+      "rgba(255, 255, 255, " + (0.7 + particle.amplitude * 0.3) + ")"
+    );
+    gradient.addColorStop(
+      0.6,
+      "rgba(200, 230, 255, " + (0.3 + particle.amplitude * 0.3) + ")"
+    );
+    gradient.addColorStop(
+      1,
+      "rgba(70, 130, " +
+        blueIntensity +
+        ", " +
+        (0.1 + particle.amplitude * 0.2) +
+        ")"
+    );
+
+    canvasCtx.fillStyle = gradient;
+    canvasCtx.fill();
+  });
 }
 
 // Function to resize canvas
@@ -736,128 +937,6 @@ window.addEventListener("resize", function () {
     resizeCanvas(canvas);
   }
 });
-
-// Optimize the visualization to reduce CPU usage
-function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
-  // Check if any tracks are playing
-  const isPlaying = Object.values(currentlyPlaying).some(
-    (item) => item.source !== null
-  );
-
-  // Use less frequent updates when not playing to reduce CPU load
-  if (!isPlaying) {
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw pulsing circle with shifting colors
-    const time = Date.now() / 1000;
-    const pulse = Math.sin(time * 2) * 0.1 + 0.9;
-    const idleHue = (time * 15) % 360;
-
-    canvasCtx.beginPath();
-    canvasCtx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      (canvas.width / 2 - 10) * pulse,
-      0,
-      2 * Math.PI,
-      false
-    );
-    canvasCtx.lineWidth = 2;
-    canvasCtx.strokeStyle = `hsla(${idleHue}, 80%, 60%, 0.5)`;
-    canvasCtx.stroke();
-
-    // Use a slower frame rate for idle animations (every ~100ms instead of every frame)
-    animationFrameId = setTimeout(() => {
-      animationFrameId = requestAnimationFrame(() =>
-        animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
-      );
-    }, 100);
-    return;
-  }
-
-  // When playing, get frequency data and animate
-  try {
-    masterAnalyser.getByteFrequencyData(dataArray);
-
-    // Clear the canvas
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the visualization with fewer elements to reduce CPU load
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(centerX, centerY) - 10;
-    const time = Date.now() / 1000;
-
-    // Draw background circle
-    const bgHue = (time * 10) % 360;
-    canvasCtx.beginPath();
-    canvasCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-    canvasCtx.lineWidth = 1;
-    canvasCtx.strokeStyle = `hsla(${bgHue}, 70%, 60%, 0.15)`;
-    canvasCtx.stroke();
-
-    // Draw fewer frequency bars to reduce CPU load
-    // Use step to reduce number of bars by half
-    const step = 2;
-    const barCount = bufferLength / 2;
-    const colorOffset = Math.sin(time * 0.5) * 100;
-
-    for (let i = 0; i < barCount; i += step) {
-      const angle = (i / barCount) * 2 * Math.PI;
-      const amplitude = dataArray[i] / 255;
-
-      const innerRadius = radius * 0.3;
-      const outerRadius = innerRadius + (radius - innerRadius) * amplitude;
-
-      const startX = centerX + innerRadius * Math.cos(angle);
-      const startY = centerY + innerRadius * Math.sin(angle);
-      const endX = centerX + outerRadius * Math.cos(angle);
-      const endY = centerY + outerRadius * Math.sin(angle);
-
-      canvasCtx.beginPath();
-      canvasCtx.moveTo(startX, startY);
-      canvasCtx.lineTo(endX, endY);
-      canvasCtx.lineWidth = 2;
-
-      // Simplified color logic for better performance
-      let hue = ((i / barCount) * 360 + time * 20) % 360;
-
-      // Apply colorPattern only every other update to save performance
-      if (Math.floor(time) % 2 === 0) {
-        const colorPattern = Math.floor(time / 5) % 4;
-        switch (colorPattern) {
-          case 0: // Rainbow spiral
-            hue = ((i / barCount) * 360 + time * 30) % 360;
-            break;
-          case 1: // Complementary colors
-            hue = ((i % 2) * 180 + time * 20) % 360;
-            break;
-          case 2: // Frequency-based with offset
-            hue = ((i / barCount) * 180 + colorOffset + amplitude * 100) % 360;
-            break;
-          case 3: // Psychedelic pattern
-            hue = ((angle * 180) / Math.PI + time * 50) % 360;
-            break;
-        }
-      }
-
-      const saturation = 80 + amplitude * 20;
-      const lightness = 50 + amplitude * 20;
-
-      canvasCtx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${
-        0.6 + amplitude * 0.4
-      })`;
-      canvasCtx.stroke();
-    }
-  } catch (e) {
-    console.error("Visualization error:", e);
-  }
-
-  // Continue animation loop with a small delay to reduce CPU load during heavy processing
-  animationFrameId = requestAnimationFrame(() =>
-    animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
-  );
-}
 
 // Stop visualization
 function stopVisualization() {
