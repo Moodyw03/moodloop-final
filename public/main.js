@@ -6,12 +6,16 @@ let masterAnalyser = null;
 let visualizationActive = false;
 let animationFrameId = null;
 
-// Add lookahead scheduling constants
-const LOOKAHEAD = 0.1; // 100ms lookahead
-const SCHEDULE_AHEAD_TIME = 0.2; // Schedule 200ms ahead
+// Improved scheduling constants for better performance
+const BUFFER_REDUNDANCY = 3; // Schedule multiple buffers ahead
+const SCHEDULE_AHEAD_TIME = 0.3; // Schedule 300ms ahead
+const UPDATE_INTERVAL = 100; // Update scheduler every 100ms
+const CROSSFADE_DURATION = 0.05; // 50ms crossfade at loop points
 
-// Buffer size to reduce stuttering
-const BUFFER_SIZE = 2048;
+// Create a master gain node for better audio handling
+let masterGainNode = context.createGain();
+masterGainNode.gain.value = 1;
+masterGainNode.connect(context.destination);
 
 let currentlyPlaying = {
   rhythm: { source: null, gainNode: null },
@@ -61,28 +65,64 @@ let firstStartTime = null;
 let list;
 let isSolo = false;
 
-function unlockAudioContext(audioContext) {
-  if (audioContext.state === "suspended") {
-    const unlock = async () => {
-      await audioContext.resume();
+// Add scheduler variables
+let schedulerTimerID = null;
 
-      // Change buffer size for better performance
-      if (audioContext.state === "running") {
-        console.log("AudioContext is now running");
-      }
+// Initialize Web Audio API with proper settings for best performance
+function initAudio() {
+  // Create a new AudioContext with larger buffer size for stability
+  context = new (window.AudioContext || window.webkitAudioContext)({
+    latencyHint: "playback",
+    sampleRate: 44100,
+  });
 
-      document.body.removeEventListener("touchstart", unlock);
-      document.body.removeEventListener("touchend", unlock);
-      document.body.removeEventListener("mousedown", unlock);
-    };
+  // Create master gain node
+  masterGainNode = context.createGain();
+  masterGainNode.gain.value = 1;
+  masterGainNode.connect(context.destination);
 
-    document.body.addEventListener("touchstart", unlock, false);
-    document.body.addEventListener("touchend", unlock, false);
-    document.body.addEventListener("mousedown", unlock, false); // Add mouse event for better handling
-  }
+  // Ensure audio context is running
+  unlockAudioContext(context);
+
+  // Setup periodic check to ensure audio context stays running
+  setInterval(() => {
+    if (context.state !== "running") {
+      context.resume().catch((e) => console.log("Error resuming context:", e));
+    }
+  }, 500);
 }
 
-unlockAudioContext(context);
+function unlockAudioContext(audioContext) {
+  const resumeContext = async () => {
+    if (audioContext.state !== "running") {
+      try {
+        await audioContext.resume();
+        console.log("AudioContext is now running");
+      } catch (e) {
+        console.error("Failed to resume AudioContext:", e);
+      }
+    }
+  };
+
+  // Call immediately
+  resumeContext();
+
+  // Also set up events to unlock audio
+  const events = ["touchstart", "touchend", "mousedown", "keydown", "click"];
+  const unlockOnEvent = async () => {
+    await resumeContext();
+    events.forEach((event) => {
+      document.body.removeEventListener(event, unlockOnEvent);
+    });
+  };
+
+  events.forEach((event) => {
+    document.body.addEventListener(event, unlockOnEvent, false);
+  });
+}
+
+// Call initAudio instead of just unlocking
+initAudio();
 
 // WHEN DRAGGING START
 function drag(event) {
@@ -160,84 +200,271 @@ $(function () {
 });
 
 async function loadAudio(url, list) {
-  let response = await fetch(url);
-  let arrayBuffer = await response.arrayBuffer();
-  let audioData = await context.decodeAudioData(arrayBuffer);
-  audioBuffers[list] = audioData;
-  currentListOfAudioInDZ[list] = url;
+  try {
+    let response = await fetch(url);
+    let arrayBuffer = await response.arrayBuffer();
 
-  // Remove the "selected" class from all files
-  $(".draggableContainer").removeClass("selected");
+    // Use promise for decoding to handle errors better
+    let audioData = await new Promise((resolve, reject) => {
+      context.decodeAudioData(arrayBuffer, resolve, reject);
+    });
 
-  // Add the "selected" class to the selected file
-  $(`div[data-audio='${url}']`).addClass("selected");
+    audioBuffers[list] = audioData;
+    currentListOfAudioInDZ[list] = url;
+
+    // Remove the "selected" class from all files
+    $(".draggableContainer").removeClass("selected");
+
+    // Add the "selected" class to the selected file
+    $(`div[data-audio='${url}']`).addClass("selected");
+
+    return true;
+  } catch (error) {
+    console.error("Error loading audio:", error);
+    return false;
+  }
 }
 
 function playAudio(list) {
-  let source = context.createBufferSource();
-  source.buffer = audioBuffers[list];
-  source.loop = true;
+  // If we don't have a buffer yet, exit
+  if (!audioBuffers[list]) {
+    console.error("No audio buffer found for", list);
+    return;
+  }
 
+  // Make sure context is running
+  if (context.state !== "running") {
+    console.log("Resuming audio context...");
+    context.resume().catch((e) => console.error("Error resuming context:", e));
+  }
+
+  // If there was a previous source, stop it properly
+  if (currentlyPlaying[list].source) {
+    try {
+      currentlyPlaying[list].source.stop();
+    } catch (e) {
+      console.log("Error stopping previous source:", e);
+    }
+    currentlyPlaying[list].source = null;
+  }
+
+  // Create and set up gain node if it doesn't exist
   let gainNode;
   if (currentlyPlaying[list].gainNode) {
     gainNode = currentlyPlaying[list].gainNode;
+    // Reset any scheduled values
+    gainNode.gain.cancelScheduledValues(context.currentTime);
+    gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
   } else {
     gainNode = context.createGain();
-    gainNode.gain.value = 1; // Set the initial gain value to 1.
+    gainNode.gain.value = isMuted[list] ? 0 : 1;
   }
 
-  // Check if the EQ settings for this list exist
+  // Check if the EQ settings for this list exist and create if needed
   if (!eqSettings[list].bass) {
     createEQ(list);
   }
 
-  // Connect the source to the EQ and then to the gain node
-  source.connect(eqSettings[list].bass);
-  eqSettings[list].bass.connect(eqSettings[list].mid);
-  eqSettings[list].mid.connect(eqSettings[list].treble);
-  eqSettings[list].treble.connect(gainNode);
-
-  // Connect to master analyzer for visualization
-  if (!masterAnalyser) {
-    initializeVisualization();
-  }
-
-  // Connect the gain node to both the analyzer and the destination
-  gainNode.connect(masterAnalyser);
-  gainNode.connect(context.destination);
-
+  // Set the global start time if not set
   if (firstStartTime === null) {
     firstStartTime = context.currentTime;
+    console.log("Set first start time to", firstStartTime);
   }
 
-  const loopDuration = source.buffer.duration;
+  try {
+    // Try the crossfade approach first
+    scheduleBufferWithCrossfade(list, gainNode);
 
-  // Calculate a precise offset that aligns with buffer boundaries
-  const currentTime = context.currentTime;
-  const timeSinceStart = currentTime - firstStartTime;
-  const offset = timeSinceStart % loopDuration;
-
-  // Use a small delay to ensure proper buffering before playback
-  const startTime = currentTime + 0.005; // 5ms delay for buffer preparation
-  source.start(startTime, offset);
-
-  // If there was a previous source, schedule its end to match the new source start
-  if (currentlyPlaying[list].source) {
-    currentlyPlaying[list].source.stop(startTime);
-  }
-
-  currentlyPlaying[list].source = source;
-  currentlyPlaying[list].gainNode = gainNode; // Save the gain node
-
-  // Store this source in our scheduled sources
-  scheduledSources[list] = source;
-
-  // Add event listener for when the source ends
-  source.onended = () => {
-    if (scheduledSources[list] === source) {
-      delete scheduledSources[list];
+    // Connect to analyzer for visualization if exists
+    if (!masterAnalyser) {
+      initializeVisualization();
     }
-  };
+  } catch (error) {
+    console.error("Error in playAudio:", error);
+    // If crossfade fails, fall back to simple looping
+    fallbackPlayAudio(list, gainNode);
+  }
+}
+
+// Schedule a single segment with proper crossfading
+function scheduleSegment(list, gainNode, startTime, offset, duration) {
+  const buffer = audioBuffers[list];
+  if (!buffer) return;
+
+  try {
+    // Create source for this segment
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.loop = false; // We handle looping manually
+
+    // Create individual gain node for this segment for crossfading
+    const segmentGain = context.createGain();
+    segmentGain.gain.setValueAtTime(1, startTime);
+
+    // Connect source -> segment gain -> EQ chain -> main gain -> output
+    source.connect(segmentGain);
+    segmentGain.connect(eqSettings[list].bass);
+    eqSettings[list].bass.connect(eqSettings[list].mid);
+    eqSettings[list].mid.connect(eqSettings[list].treble);
+    eqSettings[list].treble.connect(gainNode);
+
+    // Make sure gain node is connected to outputs
+    gainNode.connect(masterAnalyser || context.destination);
+    gainNode.connect(masterGainNode);
+
+    // Start the source at the specified time and offset
+    // Make sure duration is positive and valid
+    const validDuration = Math.min(
+      duration + CROSSFADE_DURATION,
+      buffer.duration
+    );
+    if (validDuration <= 0) {
+      console.error("Invalid duration for audio segment:", validDuration);
+      return;
+    }
+
+    source.start(startTime, offset, validDuration);
+    console.log(
+      `Started segment at ${startTime}, offset ${offset}, duration ${validDuration}`
+    );
+
+    // Store the current active source
+    currentlyPlaying[list].source = source;
+
+    // Calculate next segment start time (with overlap for crossfade)
+    const nextSegmentStartTime = startTime + duration - CROSSFADE_DURATION;
+
+    // Apply crossfade - fade out current segment at crossfade point
+    segmentGain.gain.setValueAtTime(1, nextSegmentStartTime);
+    segmentGain.gain.linearRampToValueAtTime(
+      0,
+      nextSegmentStartTime + CROSSFADE_DURATION
+    );
+
+    // Schedule the next segment to start at the crossfade point
+    // Only schedule if we're not stopping
+    setTimeout(() => {
+      // Check if we're still meant to be playing
+      if (currentlyPlaying[list].source === source) {
+        scheduleSegment(
+          list,
+          gainNode,
+          nextSegmentStartTime,
+          0,
+          buffer.duration
+        );
+      }
+    }, Math.max(0, (nextSegmentStartTime - context.currentTime - 0.1) * 1000));
+  } catch (error) {
+    console.error("Error scheduling audio segment:", error);
+
+    // Fallback to simpler playback method if crossfade fails
+    fallbackPlayAudio(list, gainNode);
+  }
+}
+
+// Add a fallback playback method that uses simpler looping
+function fallbackPlayAudio(list, gainNode) {
+  console.log("Using fallback audio playback for", list);
+  try {
+    const buffer = audioBuffers[list];
+    if (!buffer) return;
+
+    // Create a simple looping source as fallback
+    const source = context.createBufferSource();
+    source.buffer = buffer;
+    source.loop = true;
+
+    // Make simple connections
+    source.connect(eqSettings[list].bass);
+    eqSettings[list].bass.connect(eqSettings[list].mid);
+    eqSettings[list].mid.connect(eqSettings[list].treble);
+    eqSettings[list].treble.connect(gainNode);
+
+    // Connect gain to outputs
+    gainNode.connect(masterAnalyser || context.destination);
+    gainNode.connect(masterGainNode);
+
+    // Start with simple offset if we have a global start time
+    let offset = 0;
+    if (firstStartTime !== null) {
+      offset = (context.currentTime - firstStartTime) % buffer.duration;
+    }
+
+    source.start(0, offset);
+    currentlyPlaying[list].source = source;
+    currentlyPlaying[list].gainNode = gainNode;
+
+    console.log("Fallback audio started successfully");
+  } catch (error) {
+    console.error("Fallback audio also failed:", error);
+  }
+}
+
+// New function to schedule audio buffer with crossfading at loop points
+function scheduleBufferWithCrossfade(list, gainNode) {
+  const buffer = audioBuffers[list];
+  if (!buffer) return;
+
+  try {
+    const loopDuration = buffer.duration;
+    const currentTime = context.currentTime;
+
+    // Calculate initial offset based on global start time
+    let offset = 0;
+    if (firstStartTime !== null) {
+      const timeSinceStart = currentTime - firstStartTime;
+      offset = timeSinceStart % loopDuration;
+    }
+
+    // Start time with a small delay for buffer preparation
+    const startTime = currentTime + 0.05;
+
+    // Schedule first buffer segment
+    scheduleSegment(list, gainNode, startTime, offset, loopDuration - offset);
+
+    // Store references
+    currentlyPlaying[list].gainNode = gainNode;
+
+    // Ensure gain node is connected to output
+    gainNode.connect(masterAnalyser || context.destination);
+    gainNode.connect(masterGainNode);
+  } catch (error) {
+    console.error("Error in scheduleBufferWithCrossfade:", error);
+    fallbackPlayAudio(list, gainNode);
+  }
+}
+
+// Simplify the stop function to handle our new setup
+function stopAudioSource(list) {
+  if (currentlyPlaying[list].source) {
+    try {
+      // Apply fade out to avoid clicks
+      const gainNode = currentlyPlaying[list].gainNode;
+      if (gainNode) {
+        const currentTime = context.currentTime;
+        gainNode.gain.cancelScheduledValues(currentTime);
+        gainNode.gain.setValueAtTime(gainNode.gain.value, currentTime);
+        gainNode.gain.linearRampToValueAtTime(0, currentTime + 0.05);
+      }
+
+      // Stop the source after a short delay to allow fade out
+      setTimeout(() => {
+        if (currentlyPlaying[list].source) {
+          currentlyPlaying[list].source.stop();
+          currentlyPlaying[list].source = null;
+        }
+      }, 60);
+    } catch (e) {
+      // Handle already stopped sources
+      currentlyPlaying[list].source = null;
+    }
+  }
+
+  // Clear the scheduled sources array
+  if (scheduledSources[list]) {
+    scheduledSources[list] = [];
+  }
 }
 
 function pauseAudio(list) {
@@ -246,84 +473,69 @@ function pauseAudio(list) {
     // If the audio is playing, stop it and remember the time it was paused
     paused[list] = true;
     pauseTime[list] = context.currentTime - firstStartTime;
-    currentlyPlaying[list].source.stop();
-    currentlyPlaying[list].source = null;
+    stopAudioSource(list);
   }
 }
 
 function stopAudio(list) {
-  // Check if the audio is playing and if source exists
-  if (currentlyPlaying[list] && currentlyPlaying[list].source) {
-    currentlyPlaying[list].source.stop();
-    currentlyPlaying[list].source = null;
-  }
+  // Stop all sources for this track
+  stopAudioSource(list);
 }
 
 function resumeAudio(list) {
-  if (paused[list]) {
-    // If the audio is paused, start it from the pause time
-    let source = context.createBufferSource();
-    source.buffer = audioBuffers[list];
-    source.loop = true;
-
-    // If there's already a gainNode for this list, connect the source to the existing gainNode
+  if (paused[list] && audioBuffers[list]) {
+    // Create and set up gain node if it doesn't exist
     let gainNode;
     if (currentlyPlaying[list].gainNode) {
       gainNode = currentlyPlaying[list].gainNode;
+      // Reset gain to avoid any leftover fade-outs
+      gainNode.gain.cancelScheduledValues(context.currentTime);
+      gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
     } else {
       gainNode = context.createGain();
-      gainNode.gain.value = 1;
+      gainNode.gain.value = isMuted[list] ? 0 : 1;
       currentlyPlaying[list].gainNode = gainNode;
     }
 
-    // Connect the source to the EQ and then to the gain node
-    if (!eqSettings[list].bass) {
-      createEQ(list);
-    }
-
-    source.connect(eqSettings[list].bass);
-    eqSettings[list].bass.connect(eqSettings[list].mid);
-    eqSettings[list].mid.connect(eqSettings[list].treble);
-    eqSettings[list].treble.connect(gainNode);
-    gainNode.connect(context.destination);
+    // Connect gain node to outputs
+    gainNode.connect(masterAnalyser || context.destination);
+    gainNode.connect(masterGainNode);
 
     // If no track has started yet, start this one at time 0
     if (firstStartTime === null) {
       firstStartTime = context.currentTime;
     }
 
-    // Calculate a more precise offset
-    const loopDuration = source.buffer.duration;
-    let offset = pauseTime[list] % loopDuration;
+    // Calculate precise offset from pause time
+    const offset = pauseTime[list] % audioBuffers[list].duration;
 
-    // Small delay to ensure buffer preparation
-    const startTime = context.currentTime + 0.005;
-    source.start(startTime, offset);
+    // Schedule with proper crossfade
+    const startTime = context.currentTime + 0.05;
+    scheduleSegment(
+      list,
+      gainNode,
+      startTime,
+      offset,
+      audioBuffers[list].duration - offset
+    );
 
     // Reset the pause state
     paused[list] = false;
     pauseTime[list] = 0;
-    currentlyPlaying[list].source = source;
-
-    // Store this source in our scheduled sources
-    scheduledSources[list] = source;
-
-    // Add event listener for when the source ends
-    source.onended = () => {
-      if (scheduledSources[list] === source) {
-        delete scheduledSources[list];
-      }
-    };
   }
 }
 
 function muteAudio(list) {
-  if (currentlyPlaying[list]?.source) {
+  if (currentlyPlaying[list]?.gainNode) {
     if (!isMuted[list]) {
-      currentlyPlaying[list].gainNode.gain.value = 0; // Mute the audio
+      // Smoothly transition to muted to avoid clicks
+      const gainNode = currentlyPlaying[list].gainNode;
+      gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.05);
       isMuted[list] = true;
     } else {
-      currentlyPlaying[list].gainNode.gain.value = 1; // Unmute the audio
+      // Smoothly transition back to audible
+      const gainNode = currentlyPlaying[list].gainNode;
+      gainNode.gain.linearRampToValueAtTime(1, context.currentTime + 0.05);
       isMuted[list] = false;
     }
   }
@@ -397,6 +609,7 @@ function stopTheAudio() {
   stopAudio("bass");
   stopAudio("percussion");
   stopAudio("synth");
+
   // Reset firstStartTime
   firstStartTime = null;
 
@@ -480,15 +693,6 @@ document.getElementById("closeModalBtn").addEventListener("click", function () {
   document.getElementById("myModal").style.display = "none";
 });
 
-// Check if the audio context gets suspended and resume it
-setInterval(() => {
-  if (context.state === "suspended") {
-    context.resume().then(() => {
-      console.log("AudioContext resumed successfully");
-    });
-  }
-}, 1000); // Check every second
-
 // Initialize the audio visualization
 function initializeVisualization() {
   if (!masterAnalyser) {
@@ -533,24 +737,20 @@ window.addEventListener("resize", function () {
   }
 });
 
-// Animation function for the visualization
+// Optimize the visualization to reduce CPU usage
 function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
   // Check if any tracks are playing
   const isPlaying = Object.values(currentlyPlaying).some(
     (item) => item.source !== null
   );
 
-  // Get current time for color animations
-  const time = Date.now() / 1000;
-
-  // If nothing is playing, draw a static circle
+  // Use less frequent updates when not playing to reduce CPU load
   if (!isPlaying) {
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw pulsing circle with shifting colors
-    const pulse = Math.sin(time * 2) * 0.1 + 0.9; // Value between 0.8 and 1.0
-
-    // Shift hue over time for idle animation
+    const time = Date.now() / 1000;
+    const pulse = Math.sin(time * 2) * 0.1 + 0.9;
     const idleHue = (time * 15) % 360;
 
     canvasCtx.beginPath();
@@ -566,89 +766,94 @@ function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
     canvasCtx.strokeStyle = `hsla(${idleHue}, 80%, 60%, 0.5)`;
     canvasCtx.stroke();
 
-    animationFrameId = requestAnimationFrame(() =>
-      animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
-    );
+    // Use a slower frame rate for idle animations (every ~100ms instead of every frame)
+    animationFrameId = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(() =>
+        animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
+      );
+    }, 100);
     return;
   }
 
-  // Get frequency data
-  masterAnalyser.getByteFrequencyData(dataArray);
+  // When playing, get frequency data and animate
+  try {
+    masterAnalyser.getByteFrequencyData(dataArray);
 
-  // Clear the canvas
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    // Clear the canvas
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw circular visualizer
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-  const radius = Math.min(centerX, centerY) - 10;
+    // Draw the visualization with fewer elements to reduce CPU load
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = Math.min(centerX, centerY) - 10;
+    const time = Date.now() / 1000;
 
-  // Draw background circle with shifting color
-  const bgHue = (time * 10) % 360;
-  canvasCtx.beginPath();
-  canvasCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-  canvasCtx.lineWidth = 1;
-  canvasCtx.strokeStyle = `hsla(${bgHue}, 70%, 60%, 0.15)`;
-  canvasCtx.stroke();
-
-  // Draw frequency bars in circular pattern
-  const barCount = bufferLength / 2;
-
-  // Create a color offset that shifts over time
-  const colorOffset = Math.sin(time * 0.5) * 100;
-
-  for (let i = 0; i < barCount; i++) {
-    const angle = (i / barCount) * 2 * Math.PI;
-    const amplitude = dataArray[i] / 255; // Normalize to 0-1
-
-    // Calculate start and end points
-    const innerRadius = radius * 0.3; // Inner limit for bars
-    const outerRadius = innerRadius + (radius - innerRadius) * amplitude;
-
-    const startX = centerX + innerRadius * Math.cos(angle);
-    const startY = centerY + innerRadius * Math.sin(angle);
-    const endX = centerX + outerRadius * Math.cos(angle);
-    const endY = centerY + outerRadius * Math.sin(angle);
-
-    // Draw the line
+    // Draw background circle
+    const bgHue = (time * 10) % 360;
     canvasCtx.beginPath();
-    canvasCtx.moveTo(startX, startY);
-    canvasCtx.lineTo(endX, endY);
-    canvasCtx.lineWidth = 2;
-
-    // Create more quirky color patterns
-    // Use a wider range of colors and patterns based on position and time
-    let hue;
-
-    // Choose color pattern based on time
-    const colorPattern = Math.floor(time / 5) % 4;
-
-    switch (colorPattern) {
-      case 0: // Rainbow spiral
-        hue = ((i / barCount) * 360 + time * 30) % 360;
-        break;
-      case 1: // Complementary colors
-        hue = ((i % 2) * 180 + time * 20) % 360;
-        break;
-      case 2: // Frequency-based with offset
-        hue = ((i / barCount) * 180 + colorOffset + amplitude * 100) % 360;
-        break;
-      case 3: // Psychedelic pattern
-        hue = ((angle * 180) / Math.PI + time * 50) % 360;
-        break;
-    }
-
-    // Vary saturation and lightness based on amplitude for more vibrancy
-    const saturation = 80 + amplitude * 20; // 80-100%
-    const lightness = 50 + amplitude * 20; // 50-70%
-
-    canvasCtx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${
-      0.6 + amplitude * 0.4
-    })`;
+    canvasCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+    canvasCtx.lineWidth = 1;
+    canvasCtx.strokeStyle = `hsla(${bgHue}, 70%, 60%, 0.15)`;
     canvasCtx.stroke();
+
+    // Draw fewer frequency bars to reduce CPU load
+    // Use step to reduce number of bars by half
+    const step = 2;
+    const barCount = bufferLength / 2;
+    const colorOffset = Math.sin(time * 0.5) * 100;
+
+    for (let i = 0; i < barCount; i += step) {
+      const angle = (i / barCount) * 2 * Math.PI;
+      const amplitude = dataArray[i] / 255;
+
+      const innerRadius = radius * 0.3;
+      const outerRadius = innerRadius + (radius - innerRadius) * amplitude;
+
+      const startX = centerX + innerRadius * Math.cos(angle);
+      const startY = centerY + innerRadius * Math.sin(angle);
+      const endX = centerX + outerRadius * Math.cos(angle);
+      const endY = centerY + outerRadius * Math.sin(angle);
+
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(startX, startY);
+      canvasCtx.lineTo(endX, endY);
+      canvasCtx.lineWidth = 2;
+
+      // Simplified color logic for better performance
+      let hue = ((i / barCount) * 360 + time * 20) % 360;
+
+      // Apply colorPattern only every other update to save performance
+      if (Math.floor(time) % 2 === 0) {
+        const colorPattern = Math.floor(time / 5) % 4;
+        switch (colorPattern) {
+          case 0: // Rainbow spiral
+            hue = ((i / barCount) * 360 + time * 30) % 360;
+            break;
+          case 1: // Complementary colors
+            hue = ((i % 2) * 180 + time * 20) % 360;
+            break;
+          case 2: // Frequency-based with offset
+            hue = ((i / barCount) * 180 + colorOffset + amplitude * 100) % 360;
+            break;
+          case 3: // Psychedelic pattern
+            hue = ((angle * 180) / Math.PI + time * 50) % 360;
+            break;
+        }
+      }
+
+      const saturation = 80 + amplitude * 20;
+      const lightness = 50 + amplitude * 20;
+
+      canvasCtx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${
+        0.6 + amplitude * 0.4
+      })`;
+      canvasCtx.stroke();
+    }
+  } catch (e) {
+    console.error("Visualization error:", e);
   }
 
-  // Continue animation loop
+  // Continue animation loop with a small delay to reduce CPU load during heavy processing
   animationFrameId = requestAnimationFrame(() =>
     animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
   );
