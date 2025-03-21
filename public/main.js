@@ -1,6 +1,11 @@
 let context = new AudioContext();
 let scheduledSources = {}; // Track scheduled audio sources
 
+// Add analyzer for visualization
+let masterAnalyser = null;
+let visualizationActive = false;
+let animationFrameId = null;
+
 // Add lookahead scheduling constants
 const LOOKAHEAD = 0.1; // 100ms lookahead
 const SCHEDULE_AHEAD_TIME = 0.2; // Schedule 200ms ahead
@@ -125,11 +130,19 @@ $(function () {
   dropZone.on("dragover dragenter", function (e) {
     e.preventDefault();
     e.stopPropagation();
+    $(this).addClass("drag-over");
+  });
+
+  dropZone.on("dragleave dragend", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).removeClass("drag-over");
   });
 
   dropZone.on("drop", async function (e) {
     e.preventDefault();
     e.stopPropagation();
+    $(this).removeClass("drag-over");
 
     var data = JSON.parse(e.originalEvent.dataTransfer.getData("text"));
     var file = data.src;
@@ -183,7 +196,15 @@ function playAudio(list) {
   eqSettings[list].bass.connect(eqSettings[list].mid);
   eqSettings[list].mid.connect(eqSettings[list].treble);
   eqSettings[list].treble.connect(gainNode);
-  gainNode.connect(context.destination); // Connect the gain node to the destination
+
+  // Connect to master analyzer for visualization
+  if (!masterAnalyser) {
+    initializeVisualization();
+  }
+
+  // Connect the gain node to both the analyzer and the destination
+  gainNode.connect(masterAnalyser);
+  gainNode.connect(context.destination);
 
   if (firstStartTime === null) {
     firstStartTime = context.currentTime;
@@ -378,6 +399,14 @@ function stopTheAudio() {
   stopAudio("synth");
   // Reset firstStartTime
   firstStartTime = null;
+
+  // Reset but don't stop the visualization
+  // This will show the idle pulsing circle
+  const canvas = document.getElementById("visualizer");
+  if (canvas) {
+    const canvasCtx = canvas.getContext("2d");
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 }
 
 function createEQ(list) {
@@ -459,3 +488,146 @@ setInterval(() => {
     });
   }
 }, 1000); // Check every second
+
+// Initialize the audio visualization
+function initializeVisualization() {
+  if (!masterAnalyser) {
+    masterAnalyser = context.createAnalyser();
+    masterAnalyser.fftSize = 256;
+    masterAnalyser.connect(context.destination);
+  }
+
+  // Get the canvas and context
+  const canvas = document.getElementById("visualizer");
+  if (!canvas) return;
+
+  // Set canvas size to match parent container
+  resizeCanvas(canvas);
+
+  const canvasCtx = canvas.getContext("2d");
+  const bufferLength = masterAnalyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  // Start animation loop if not already running
+  if (!visualizationActive) {
+    visualizationActive = true;
+    animateVisualization(canvasCtx, canvas, dataArray, bufferLength);
+  }
+}
+
+// Function to resize canvas
+function resizeCanvas(canvas) {
+  const dropZone = document.getElementById("drop_zone");
+  if (!dropZone || !canvas) return;
+
+  const size = Math.min(dropZone.offsetWidth, dropZone.offsetHeight);
+  canvas.width = size - 5; // Subtract a little for padding
+  canvas.height = size - 5;
+}
+
+// Add resize event listener
+window.addEventListener("resize", function () {
+  const canvas = document.getElementById("visualizer");
+  if (canvas) {
+    resizeCanvas(canvas);
+  }
+});
+
+// Animation function for the visualization
+function animateVisualization(canvasCtx, canvas, dataArray, bufferLength) {
+  // Check if any tracks are playing
+  const isPlaying = Object.values(currentlyPlaying).some(
+    (item) => item.source !== null
+  );
+
+  // If nothing is playing, draw a static circle
+  if (!isPlaying) {
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw pulsing circle
+    const time = Date.now() / 1000;
+    const pulse = Math.sin(time * 2) * 0.1 + 0.9; // Value between 0.8 and 1.0
+
+    canvasCtx.beginPath();
+    canvasCtx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      (canvas.width / 2 - 10) * pulse,
+      0,
+      2 * Math.PI,
+      false
+    );
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = "rgba(103, 103, 222, 0.5)";
+    canvasCtx.stroke();
+
+    animationFrameId = requestAnimationFrame(() =>
+      animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
+    );
+    return;
+  }
+
+  // Get frequency data
+  masterAnalyser.getByteFrequencyData(dataArray);
+
+  // Clear the canvas
+  canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw circular visualizer
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = Math.min(centerX, centerY) - 10;
+
+  canvasCtx.beginPath();
+  canvasCtx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+  canvasCtx.lineWidth = 1;
+  canvasCtx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+  canvasCtx.stroke();
+
+  // Draw frequency bars in circular pattern
+  const barCount = bufferLength / 2;
+
+  for (let i = 0; i < barCount; i++) {
+    const angle = (i / barCount) * 2 * Math.PI;
+    const amplitude = dataArray[i] / 255; // Normalize to 0-1
+
+    // Calculate start and end points
+    const innerRadius = radius * 0.3; // Inner limit for bars
+    const outerRadius = innerRadius + (radius - innerRadius) * amplitude;
+
+    const startX = centerX + innerRadius * Math.cos(angle);
+    const startY = centerY + innerRadius * Math.sin(angle);
+    const endX = centerX + outerRadius * Math.cos(angle);
+    const endY = centerY + outerRadius * Math.sin(angle);
+
+    // Draw the line
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(startX, startY);
+    canvasCtx.lineTo(endX, endY);
+    canvasCtx.lineWidth = 2;
+
+    // Create color gradient based on frequency
+    const hue = (i / barCount) * 240; // from blue to purple
+    canvasCtx.strokeStyle = `hsla(${hue}, 80%, 60%, ${0.5 + amplitude * 0.5})`;
+    canvasCtx.stroke();
+  }
+
+  // Continue animation loop
+  animationFrameId = requestAnimationFrame(() =>
+    animateVisualization(canvasCtx, canvas, dataArray, bufferLength)
+  );
+}
+
+// Stop visualization
+function stopVisualization() {
+  visualizationActive = false;
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+}
+
+// Initialize visualization on page load
+$(document).ready(function () {
+  initializeVisualization();
+});
