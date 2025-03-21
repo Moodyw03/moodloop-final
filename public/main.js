@@ -212,11 +212,14 @@ async function loadAudio(url, list) {
     audioBuffers[list] = audioData;
     currentListOfAudioInDZ[list] = url;
 
-    // Remove the "selected" class from all files
-    $(".draggableContainer").removeClass("selected");
+    // Remove the "selected" class from all files in this category
+    $(`.draggableContainer[data-list='${list}']`).removeClass("selected");
 
     // Add the "selected" class to the selected file
-    $(`div[data-audio='${url}']`).addClass("selected");
+    const fileContainer = $(`div[data-audio='${url}']`);
+    fileContainer.addClass("selected");
+
+    // We'll update the highlighting in playAudio function instead of here
 
     return true;
   } catch (error) {
@@ -231,6 +234,9 @@ function playAudio(list) {
     console.error("No audio buffer found for", list);
     return;
   }
+
+  // Highlight the file name when playing starts
+  updateFileHighlight(list, true);
 
   // Make sure context is running
   if (context.state !== "running") {
@@ -470,6 +476,9 @@ function stopAudioSource(list) {
 function pauseAudio(list) {
   // Check if the audio is playing and if source exists
   if (currentlyPlaying[list] && currentlyPlaying[list].source) {
+    // Remove the highlight when paused
+    updateFileHighlight(list, false);
+
     // If the audio is playing, stop it and remember the time it was paused
     paused[list] = true;
     pauseTime[list] = context.currentTime - firstStartTime;
@@ -478,12 +487,21 @@ function pauseAudio(list) {
 }
 
 function stopAudio(list) {
+  // Remove highlight when stopping
+  updateFileHighlight(list, false);
+
   // Stop all sources for this track
   stopAudioSource(list);
+
+  // Clear the current audio reference
+  currentListOfAudioInDZ[list] = null;
 }
 
 function resumeAudio(list) {
   if (paused[list] && audioBuffers[list]) {
+    // Add highlight when resuming
+    updateFileHighlight(list, true);
+
     // Create and set up gain node if it doesn't exist
     let gainNode;
     if (currentlyPlaying[list].gainNode) {
@@ -950,4 +968,41 @@ function stopVisualization() {
 // Initialize visualization on page load
 $(document).ready(function () {
   initializeVisualization();
+
+  // Apply highlight to any already selected files
+  Object.entries(currentListOfAudioInDZ).forEach(([list, url]) => {
+    if (url) {
+      const fileContainer = $(`div[data-audio='${url}']`);
+      fileContainer.addClass("selected");
+
+      // Add yellow highlight to the file name
+      const fileName = fileContainer.find(".fileName");
+      if (fileName.length) {
+        fileName.css("color", "#FFD700"); // Golden yellow color
+        fileName.css("font-weight", "bold");
+      }
+    }
+  });
 });
+
+// New function to update file highlighting based on playback status
+function updateFileHighlight(list, isPlaying) {
+  // First, reset all file highlights in this category
+  $(`.draggableContainer[data-list='${list}'] .fileName`).each(function () {
+    $(this).css("color", "");
+    $(this).css("font-weight", "");
+  });
+
+  // Only highlight the current file if it's playing
+  if (isPlaying && currentListOfAudioInDZ[list]) {
+    const fileContainer = $(
+      `div[data-audio='${currentListOfAudioInDZ[list]}']`
+    );
+    const fileName = fileContainer.find(".fileName");
+
+    if (fileName.length) {
+      fileName.css("color", "#FFD700"); // Golden yellow color
+      fileName.css("font-weight", "bold");
+    }
+  }
+}
