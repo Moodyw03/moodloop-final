@@ -27,10 +27,10 @@ masterGainNode.gain.value = 1;
 masterGainNode.connect(context.destination);
 
 let currentlyPlaying = {
-  rhythm: { source: null, gainNode: null },
-  bass: { source: null, gainNode: null },
-  percussion: { source: null, gainNode: null },
-  synth: { source: null, gainNode: null },
+  rhythm: { source: null, gainNode: null, volume: 1.0 },
+  bass: { source: null, gainNode: null, volume: 1.0 },
+  percussion: { source: null, gainNode: null, volume: 1.0 },
+  synth: { source: null, gainNode: null, volume: 1.0 },
 };
 
 const eqSettings = {
@@ -385,16 +385,25 @@ function playAudio(list) {
       currentlyPlaying[list].source = null;
     }
 
+    // Get current volume setting from slider
+    const volumeSlider = document.getElementById(`${list}Volume`);
+    if (volumeSlider) {
+      currentlyPlaying[list].volume = parseFloat(volumeSlider.value) / 100;
+    }
+
     // Create and set up gain node if it doesn't exist
     let gainNode;
     if (currentlyPlaying[list].gainNode) {
       gainNode = currentlyPlaying[list].gainNode;
       // Reset any scheduled values
       gainNode.gain.cancelScheduledValues(context.currentTime);
-      gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
+      gainNode.gain.setValueAtTime(
+        isMuted[list] ? 0 : currentlyPlaying[list].volume,
+        context.currentTime
+      );
     } else {
       gainNode = context.createGain();
-      gainNode.gain.value = isMuted[list] ? 0 : 1;
+      gainNode.gain.value = isMuted[list] ? 0 : currentlyPlaying[list].volume;
     }
 
     // Check if the EQ settings for this list exist and create if needed
@@ -494,16 +503,25 @@ function resumeAudio(list) {
     // Add highlight when resuming
     updateFileHighlight(list, true);
 
+    // Get current volume setting from slider
+    const volumeSlider = document.getElementById(`${list}Volume`);
+    if (volumeSlider) {
+      currentlyPlaying[list].volume = parseFloat(volumeSlider.value) / 100;
+    }
+
     // Create and set up gain node if it doesn't exist
     let gainNode;
     if (currentlyPlaying[list].gainNode) {
       gainNode = currentlyPlaying[list].gainNode;
       // Reset gain to avoid any leftover fade-outs
       gainNode.gain.cancelScheduledValues(context.currentTime);
-      gainNode.gain.setValueAtTime(isMuted[list] ? 0 : 1, context.currentTime);
+      gainNode.gain.setValueAtTime(
+        isMuted[list] ? 0 : currentlyPlaying[list].volume,
+        context.currentTime
+      );
     } else {
       gainNode = context.createGain();
-      gainNode.gain.value = isMuted[list] ? 0 : 1;
+      gainNode.gain.value = isMuted[list] ? 0 : currentlyPlaying[list].volume;
       currentlyPlaying[list].gainNode = gainNode;
     }
 
@@ -619,9 +637,12 @@ function muteAudio(list) {
       gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.05);
       isMuted[list] = true;
     } else {
-      // Smoothly transition back to audible
+      // Smoothly transition back to the current volume level
       const gainNode = currentlyPlaying[list].gainNode;
-      gainNode.gain.linearRampToValueAtTime(1, context.currentTime + 0.05);
+      gainNode.gain.linearRampToValueAtTime(
+        currentlyPlaying[list].volume,
+        context.currentTime + 0.05
+      );
       isMuted[list] = false;
     }
   }
@@ -770,6 +791,99 @@ document.getElementById("treble").addEventListener("input", function (event) {
     }
   });
 });
+
+// Add event listeners for individual track volume sliders
+document
+  .getElementById("rhythmVolume")
+  .addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("rhythmVolumeValue").textContent = `${value}%`;
+
+    // Convert percentage to gain value (0-1)
+    const gainValue = value / 100;
+
+    // Apply to rhythm track if it's playing
+    if (currentlyPlaying["rhythm"].gainNode) {
+      // Only change volume, not mute state
+      if (!isMuted["rhythm"]) {
+        currentlyPlaying["rhythm"].gainNode.gain.setValueAtTime(
+          gainValue,
+          context.currentTime
+        );
+      }
+      // Store the current volume level for when unmuting
+      currentlyPlaying["rhythm"].volume = gainValue;
+    }
+  });
+
+document
+  .getElementById("bassVolume")
+  .addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("bassVolumeValue").textContent = `${value}%`;
+
+    // Convert percentage to gain value (0-1)
+    const gainValue = value / 100;
+
+    // Apply to bass track if it's playing
+    if (currentlyPlaying["bass"].gainNode) {
+      // Only change volume, not mute state
+      if (!isMuted["bass"]) {
+        currentlyPlaying["bass"].gainNode.gain.setValueAtTime(
+          gainValue,
+          context.currentTime
+        );
+      }
+      // Store the current volume level for when unmuting
+      currentlyPlaying["bass"].volume = gainValue;
+    }
+  });
+
+document
+  .getElementById("percussionVolume")
+  .addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("percussionVolumeValue").textContent = `${value}%`;
+
+    // Convert percentage to gain value (0-1)
+    const gainValue = value / 100;
+
+    // Apply to percussion track if it's playing
+    if (currentlyPlaying["percussion"].gainNode) {
+      // Only change volume, not mute state
+      if (!isMuted["percussion"]) {
+        currentlyPlaying["percussion"].gainNode.gain.setValueAtTime(
+          gainValue,
+          context.currentTime
+        );
+      }
+      // Store the current volume level for when unmuting
+      currentlyPlaying["percussion"].volume = gainValue;
+    }
+  });
+
+document
+  .getElementById("synthVolume")
+  .addEventListener("input", function (event) {
+    const value = parseFloat(event.target.value);
+    document.getElementById("synthVolumeValue").textContent = `${value}%`;
+
+    // Convert percentage to gain value (0-1)
+    const gainValue = value / 100;
+
+    // Apply to synth track if it's playing
+    if (currentlyPlaying["synth"].gainNode) {
+      // Only change volume, not mute state
+      if (!isMuted["synth"]) {
+        currentlyPlaying["synth"].gainNode.gain.setValueAtTime(
+          gainValue,
+          context.currentTime
+        );
+      }
+      // Store the current volume level for when unmuting
+      currentlyPlaying["synth"].volume = gainValue;
+    }
+  });
 
 document.getElementById("showModalBtn").addEventListener("click", function () {
   document.getElementById("myModal").style.display = "block";

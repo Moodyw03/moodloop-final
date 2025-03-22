@@ -34,64 +34,13 @@
         whip up tracks!</div>
     </nav>
 
-    <div id="drop_zone">
-      <span>Drop audio here</span>
-      <canvas id="visualizer"></canvas>
-    </div>
-
-    <div id="audio_controls">
-      <!-- Audio player controls will be dynamically added here -->
-    </div>
-
-    <div class="mainbox">
-
-      <div id="eqControls">
-        <div>
-          <label for="bass">Bass:</label>
-          <input
-            type="range"
-            id="bass"
-            name="bass"
-            min="-30"
-            max="30"
-            step="1"
-            value="0" />
-          <span id="bassValue">0 dB</span>
-        </div>
-
-        <div>
-          <label for="mid">Mid:</label>
-          <input
-            type="range"
-            id="mid"
-            name="mid"
-            min="-30"
-            max="30"
-            step="1"
-            value="0" />
-          <span id="midValue">0 dB</span>
-        </div>
-
-        <div>
-          <label for="treble">Treble:</label>
-          <input
-            type="range"
-            id="treble"
-            name="treble"
-            min="-30"
-            max="30"
-            step="1"
-            value="0" />
-          <span id="trebleValue">0 dB</span>
-        </div>
-      </div>
-
-      <div class="wrapper"><button onclick="stopTheAudio()">Stop/Reset</button>
+    <div class="text-center">
+      <div class="wrapper">
+        <button onclick="stopTheAudio()">Stop/Reset</button>
         <button id="showModalBtn">Instructions!</button>
         <div class="modal" id="myModal">
           <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">&times;</span>
-
             <p id="moodLoopInstructions"><strong>Welcome to MoodLoop: House &
                 Techno's Ultimate Loop Lab</strong></p>
             <p class="pp">
@@ -123,6 +72,114 @@
               no drama. Hit that reset stop button and begin again, fresh as a
               new vinyl.</p>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="drop_zone">
+      <span>Drop audio here</span>
+      <canvas id="visualizer"></canvas>
+    </div>
+
+    <div id="audio_controls">
+      <!-- Audio player controls will be dynamically added here -->
+    </div>
+
+    <div id="eqControls">
+      <div class="eq-section">
+        <h4>Equalizer</h4>
+        <div class="control-row">
+          <label for="bass">Bass:</label>
+          <input
+            type="range"
+            id="bass"
+            name="bass"
+            min="-30"
+            max="30"
+            step="1"
+            value="0" />
+          <span id="bassValue">0 dB</span>
+        </div>
+
+        <div class="control-row">
+          <label for="mid">Mid:</label>
+          <input
+            type="range"
+            id="mid"
+            name="mid"
+            min="-30"
+            max="30"
+            step="1"
+            value="0" />
+          <span id="midValue">0 dB</span>
+        </div>
+
+        <div class="control-row">
+          <label for="treble">Treble:</label>
+          <input
+            type="range"
+            id="treble"
+            name="treble"
+            min="-30"
+            max="30"
+            step="1"
+            value="0" />
+          <span id="trebleValue">0 dB</span>
+        </div>
+      </div>
+      
+      <div class="volume-section">
+        <h4>Track Volumes</h4>
+        <div class="control-row">
+          <label for="rhythmVolume">Rhythm:</label>
+          <input
+            type="range"
+            id="rhythmVolume"
+            name="rhythmVolume"
+            min="0"
+            max="100"
+            step="1"
+            value="100" />
+          <span id="rhythmVolumeValue">100%</span>
+        </div>
+        
+        <div class="control-row">
+          <label for="bassVolume">Bass:</label>
+          <input
+            type="range"
+            id="bassVolume"
+            name="bassVolume"
+            min="0"
+            max="100"
+            step="1"
+            value="100" />
+          <span id="bassVolumeValue">100%</span>
+        </div>
+        
+        <div class="control-row">
+          <label for="percussionVolume">Percussion:</label>
+          <input
+            type="range"
+            id="percussionVolume"
+            name="percussionVolume"
+            min="0"
+            max="100"
+            step="1"
+            value="100" />
+          <span id="percussionVolumeValue">100%</span>
+        </div>
+        
+        <div class="control-row">
+          <label for="synthVolume">Synth:</label>
+          <input
+            type="range"
+            id="synthVolume"
+            name="synthVolume"
+            min="0"
+            max="100"
+            step="1"
+            value="100" />
+          <span id="synthVolumeValue">100%</span>
         </div>
       </div>
     </div>
