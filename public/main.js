@@ -13,7 +13,6 @@ const UPDATE_INTERVAL = 50; // Update scheduler more frequently (50ms)
 const CROSSFADE_DURATION = 0.1; // 100ms crossfade at loop points for smoother transition
 const PRE_SCHEDULE_TIME = 0.05; // Start next loop 50ms early to avoid gaps
 const LOOP_PADDING = 0.01; // 10ms padding on either side of loop
-const LOOP_OVERLAP = 0.02; // 20ms overlap between consecutive loops to prevent gaps
 
 // Add BPM and timing variables for precise sync
 let bpm = 120; // Default BPM, can be updated based on actual files
@@ -316,20 +315,15 @@ async function loadAudio(url, list) {
       }
 
       // Check for silence at the beginning or end of the buffer
-      const silenceInfo = checkForSilence(audioData);
-      if (silenceInfo.startSilence || silenceInfo.endSilence) {
-        console.warn(
-          `Silence detected in audio file ${url}: start=${silenceInfo.startSilence}, end=${silenceInfo.endSilence}`
-        );
-        // We could trim the silence here if needed
-      }
+      checkForSilence(audioData);
 
       // Update BPM if this is the first track loaded
       if (Object.values(audioBuffers).filter(Boolean).length === 0) {
         updateBPMFromBuffer(audioData);
       }
 
-      // Check if the buffer duration differs from expected loop length
+      // For seamless looping, ensure the buffer length exactly matches expected loop length
+      // This is absolutely critical for perfect looping using source.loop = true
       if (Math.abs(audioData.duration - loopLengthSeconds) > 0.01) {
         console.log(
           `Buffer duration (${audioData.duration.toFixed(
@@ -338,6 +332,7 @@ async function loadAudio(url, list) {
             3
           )}s)`
         );
+        // Note: We don't actually modify the buffer here, just log the discrepancy
       }
 
       audioBuffers[list] = audioData;
@@ -1411,9 +1406,8 @@ function scheduleNextLoop(list, startTime) {
     const source = context.createBufferSource();
     source.buffer = audioBuffers[list];
 
-    // Instead of using the built-in loop property which can cause stuttering,
-    // we'll manually loop by scheduling the next buffer before this one ends
-    source.loop = false;
+    // Enable native looping - this is KEY for seamless playback
+    source.loop = true;
 
     // Get the gain node for this track
     let gainNode;
@@ -1451,19 +1445,7 @@ function scheduleNextLoop(list, startTime) {
     currentlyPlaying[list].source = source;
     currentlyPlaying[list].gainNode = gainNode;
 
-    // Calculate precisely when this buffer will end
-    const bufferDuration = source.buffer.duration;
-    const nextLoopStartTime = startTime + bufferDuration - LOOP_OVERLAP;
-
-    // Schedule the next iteration before this one ends to create seamless playback
-    setTimeout(() => {
-      // Only schedule next loop if this source is still active
-      if (currentlyPlaying[list].source === source) {
-        scheduleNextLoop(list, nextLoopStartTime);
-      }
-    }, (nextLoopStartTime - context.currentTime - 0.1) * 1000);
-
-    // Add error monitoring for unexpected endings
+    // Add simple error monitoring
     source.onended = (event) => {
       // Only handle unexpected endings
       if (currentlyPlaying[list].source === source) {
@@ -1529,13 +1511,4 @@ function checkForSilence(buffer) {
       "Detected silence at the end of the audio buffer. This may affect sync."
     );
   }
-
-  return { startSilence, endSilence };
-}
-
-// Add a new function that can modify the context playback rate slightly if needed
-function tunePlaybackRate() {
-  // This can be used to fine-tune the playback if we're having sync issues
-  // For now, we're not changing the playback rate, but this is a hook for future tuning
-  return 1.0; // Default playback rate
 }
