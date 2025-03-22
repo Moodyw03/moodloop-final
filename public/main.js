@@ -11,6 +11,7 @@ const BUFFER_REDUNDANCY = 3; // Schedule multiple buffers ahead
 const SCHEDULE_AHEAD_TIME = 0.3; // Schedule 300ms ahead
 const UPDATE_INTERVAL = 100; // Update scheduler every 100ms
 const CROSSFADE_DURATION = 0.05; // 50ms crossfade at loop points
+const PRE_SCHEDULE_TIME = 0.03; // Start next loop 30ms early to avoid gaps
 
 // Add BPM and timing variables for precise sync
 let bpm = 120; // Default BPM, can be updated based on actual files
@@ -97,6 +98,19 @@ function initAudio() {
     masterGainNode = context.createGain();
     masterGainNode.gain.value = 1;
     masterGainNode.connect(context.destination);
+
+    // Add a limiter to prevent clipping during crossfades
+    const limiter = context.createDynamicsCompressor();
+    limiter.threshold.value = -0.2; // -0.2 dB
+    limiter.knee.value = 0; // Hard knee
+    limiter.ratio.value = 20; // 20:1 ratio for limiting
+    limiter.attack.value = 0.001; // 1ms attack
+    limiter.release.value = 0.1; // 100ms release
+
+    // Insert limiter between master gain and destination
+    masterGainNode.disconnect();
+    masterGainNode.connect(limiter);
+    limiter.connect(context.destination);
 
     // Ensure audio context is running
     unlockAudioContext(context);
@@ -1116,21 +1130,69 @@ function updateBPMFromBuffer(buffer) {
   // Verify the buffer duration matches our calculated loop length
   const durationError = Math.abs(buffer.duration - loopLengthSeconds);
 
-  if (durationError > 0.01) {
+  // If there's significant mismatch between buffer length and expected loop length
+  if (durationError > 0.05) {
+    // If error is more than 50ms
     console.warn(
-      `Buffer duration (${buffer.duration.toFixed(
+      `Audio buffer duration (${buffer.duration.toFixed(
         3
-      )}s) doesn't exactly match calculated loop length (${loopLengthSeconds.toFixed(
+      )}s) differs from expected loop length (${loopLengthSeconds.toFixed(
         3
-      )}s). Difference: ${durationError.toFixed(3)}s`
+      )}s) by ${durationError.toFixed(3)}s`
     );
+
+    // Fix audio buffer if needed by checking for silence and potentially resizing
+    fixAudioBuffer(buffer);
   }
 
-  return {
-    bpm,
-    barsPerLoop,
-    loopLengthSeconds,
-  };
+  // Check for silence at beginning or end of buffer which can cause stutters
+  checkForSilence(buffer);
+}
+
+// New function to fix audio buffer issues that might cause stuttering
+function fixAudioBuffer(buffer) {
+  // Check if the buffer is slightly shorter than expected loop length
+  // This is often the cause of stuttering at loop points
+  if (buffer.duration < loopLengthSeconds - 0.02) {
+    console.log(
+      "Buffer is shorter than expected loop length, may cause stuttering"
+    );
+
+    // We don't modify the buffer in-place (would require buffer copying)
+    // Instead we compensate in the scheduling code with pre-buffer time and crossfade
+  }
+
+  // Analyze dynamics at the end of the buffer
+  const endGain = analyzeBufferEnd(buffer);
+  if (endGain < 0.1) {
+    console.log(
+      "Buffer has very low volume at end, which may contribute to stuttering"
+    );
+  }
+}
+
+// New function to analyze the end of a buffer for volume issues
+function analyzeBufferEnd(buffer) {
+  const sampleRate = buffer.sampleRate;
+  const endDuration = 0.05; // Check last 50ms
+  const samplesToCheck = Math.floor(endDuration * sampleRate);
+
+  let sum = 0;
+  let count = 0;
+
+  // Analyze all channels
+  for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
+    const data = buffer.getChannelData(channel);
+    const start = Math.max(0, data.length - samplesToCheck);
+
+    for (let i = start; i < data.length; i++) {
+      sum += Math.abs(data[i]);
+      count++;
+    }
+  }
+
+  // Return average amplitude at the end
+  return count > 0 ? sum / count : 0;
 }
 
 // Start the master scheduler
@@ -1200,8 +1262,10 @@ function scheduleNextLoop(list, startTime) {
     gainNode.connect(masterAnalyser || context.destination);
     gainNode.connect(masterGainNode);
 
-    // Start the source exactly at the calculated time
-    source.start(startTime);
+    // Start the source slightly before the calculated time (pre-buffer)
+    // This helps eliminate the gap between loops
+    const preBufferTime = 0.02; // 20ms pre-buffer
+    source.start(startTime - preBufferTime);
 
     console.log(`Scheduled loop for ${list} at time ${startTime}`);
 
@@ -1209,9 +1273,28 @@ function scheduleNextLoop(list, startTime) {
     const previousSource = currentlyPlaying[list].source;
     currentlyPlaying[list].source = source;
 
-    // Schedule the previous source to stop shortly after the new one starts
+    // Implement crossfade between loop iterations to avoid stuttering
     if (previousSource) {
-      previousSource.stop(startTime + 0.01);
+      // Create a temporary gain node for the old source
+      const oldGainNode = context.createGain();
+
+      // Disconnect previous source from its current destination
+      try {
+        previousSource.disconnect();
+        // Reconnect through the temporary gain node
+        previousSource.connect(oldGainNode);
+        oldGainNode.connect(masterGainNode);
+
+        // Schedule a fade out for the previous source
+        const fadeOutDuration = CROSSFADE_DURATION * 2; // Slightly longer crossfade for smooth transition
+        oldGainNode.gain.setValueAtTime(1.0, startTime - fadeOutDuration);
+        oldGainNode.gain.linearRampToValueAtTime(0.0, startTime + 0.05);
+
+        // Schedule the previous source to stop after fade out
+        previousSource.stop(startTime + 0.1);
+      } catch (e) {
+        console.log("Error during crossfade:", e);
+      }
     }
   } catch (error) {
     console.error("Error scheduling next loop:", error);
