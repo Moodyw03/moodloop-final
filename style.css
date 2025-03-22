@@ -710,7 +710,8 @@ body {
   }
   
   .action-buttons button {
-    width: calc(50% - 5px);
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
 
   .controls-container {
@@ -865,9 +866,27 @@ body {
   text-align: center;
 }
 
+.action-buttons button:first-child {
+  background-color: rgba(30, 50, 180, 0.8);
+  color: white;
+}
+
+.action-buttons button#showModalBtn {
+  background-color: rgba(219, 110, 32, 0.8);
+  color: white;
+}
+
 .action-buttons button:hover {
   background-color: rgba(50, 50, 80, 0.7);
   box-shadow: 0 0 10px rgba(103, 103, 222, 0.4);
+}
+
+.action-buttons button:first-child:hover {
+  background-color: rgba(40, 70, 200, 0.8);
+}
+
+.action-buttons button#showModalBtn:hover {
+  background-color: rgba(239, 130, 52, 0.8);
 }
 
 @media only screen and (max-width: 768px) {
