@@ -7,11 +7,13 @@ let visualizationActive = false;
 let animationFrameId = null;
 
 // Improved scheduling constants for better performance
-const BUFFER_REDUNDANCY = 3; // Schedule multiple buffers ahead
-const SCHEDULE_AHEAD_TIME = 0.3; // Schedule 300ms ahead
-const UPDATE_INTERVAL = 100; // Update scheduler every 100ms
-const CROSSFADE_DURATION = 0.05; // 50ms crossfade at loop points
-const PRE_SCHEDULE_TIME = 0.03; // Start next loop 30ms early to avoid gaps
+const BUFFER_REDUNDANCY = 5; // Schedule more buffers ahead for reliability
+const SCHEDULE_AHEAD_TIME = 0.5; // Schedule 500ms ahead for better stability
+const UPDATE_INTERVAL = 50; // Update scheduler more frequently (50ms)
+const CROSSFADE_DURATION = 0.1; // 100ms crossfade at loop points for smoother transition
+const PRE_SCHEDULE_TIME = 0.05; // Start next loop 50ms early to avoid gaps
+const LOOP_PADDING = 0.01; // 10ms padding on either side of loop
+const LOOP_OVERLAP = 0.02; // 20ms overlap between consecutive loops to prevent gaps
 
 // Add BPM and timing variables for precise sync
 let bpm = 120; // Default BPM, can be updated based on actual files
@@ -84,6 +86,9 @@ let masterScheduler = {
   lookahead: 0.1, // Look ahead 100ms
   scheduleInterval: null,
 };
+
+// New lock to prevent rapid scheduling
+let isScheduling = false;
 
 // Initialize Web Audio API with proper settings for best performance
 function initAudio() {
@@ -311,11 +316,28 @@ async function loadAudio(url, list) {
       }
 
       // Check for silence at the beginning or end of the buffer
-      checkForSilence(audioData);
+      const silenceInfo = checkForSilence(audioData);
+      if (silenceInfo.startSilence || silenceInfo.endSilence) {
+        console.warn(
+          `Silence detected in audio file ${url}: start=${silenceInfo.startSilence}, end=${silenceInfo.endSilence}`
+        );
+        // We could trim the silence here if needed
+      }
 
       // Update BPM if this is the first track loaded
       if (Object.values(audioBuffers).filter(Boolean).length === 0) {
         updateBPMFromBuffer(audioData);
+      }
+
+      // Check if the buffer duration differs from expected loop length
+      if (Math.abs(audioData.duration - loopLengthSeconds) > 0.01) {
+        console.log(
+          `Buffer duration (${audioData.duration.toFixed(
+            3
+          )}s) differs from expected loop length (${loopLengthSeconds.toFixed(
+            3
+          )}s)`
+        );
       }
 
       audioBuffers[list] = audioData;
@@ -433,16 +455,17 @@ function playAudio(list) {
       console.log(`Current loop position: ${currentLoopPosition.toFixed(3)}s`);
     }
 
-    // Calculate the next exact bar boundary to start playback
-    // Add a small scheduling delay (5ms) for better reliability
-    const schedulingDelay = 0.005;
+    // Calculate the next bar boundary to start playback
     const timeToNextBar =
       barLengthSeconds - (currentLoopPosition % barLengthSeconds);
-    const startTime = context.currentTime + timeToNextBar + schedulingDelay;
+    const startTime = context.currentTime + timeToNextBar;
 
     // Schedule the audio to start exactly on the bar boundary
     const source = context.createBufferSource();
     source.buffer = audioBuffers[list];
+
+    // Enable loop for seamless playback
+    source.loop = true;
 
     // Make sure we have a valid buffer
     if (!source.buffer) {
@@ -1331,22 +1354,28 @@ function scheduleNextBar() {
   const currentTime = context.currentTime;
 
   // Schedule up to 1 bar ahead
-  if (masterScheduler.nextNoteTime < currentTime + 1) {
+  if (masterScheduler.nextNoteTime < currentTime + barLengthSeconds) {
     // Increment bar counter
     masterScheduler.currentBar++;
 
     // Calculate next bar time
     masterScheduler.nextNoteTime += barLengthSeconds;
 
-    // Notify all loops that a new bar is starting
-    Object.keys(currentlyPlaying).forEach((list) => {
-      if (currentlyPlaying[list].source !== null) {
-        // If we're at the end of a loop, start a new one
-        if (masterScheduler.currentBar % barsPerLoop === 0) {
-          scheduleNextLoop(list, masterScheduler.nextNoteTime);
+    // Check if we're at the end of a loop
+    if (masterScheduler.currentBar % barsPerLoop === 0) {
+      // For each active track, start a new loop iteration
+      Object.keys(currentlyPlaying).forEach((list) => {
+        if (currentlyPlaying[list].source !== null) {
+          // No need to schedule new source if using loop=true
+          // Just check if source is still active
+          const source = currentlyPlaying[list].source;
+          if (!source || source.playbackState === 3) {
+            // Source has ended for some reason, restart it
+            scheduleNextLoop(list, masterScheduler.nextNoteTime);
+          }
         }
-      }
-    });
+      });
+    }
   }
 }
 
@@ -1355,12 +1384,50 @@ function scheduleNextLoop(list, startTime) {
   if (!audioBuffers[list]) return;
 
   try {
+    // Stop previous source if it exists
+    const previousSource = currentlyPlaying[list].source;
+    if (previousSource) {
+      try {
+        // Apply a quick fade out to the previous source
+        const oldGainNode = currentlyPlaying[list].gainNode;
+        if (oldGainNode) {
+          oldGainNode.gain.linearRampToValueAtTime(0, startTime + 0.05);
+        }
+
+        // Stop after fade completes
+        setTimeout(() => {
+          try {
+            previousSource.stop();
+          } catch (e) {
+            /* Already stopped */
+          }
+        }, 100);
+      } catch (e) {
+        console.log("Error stopping previous source:", e);
+      }
+    }
+
     // Create new source for this loop
     const source = context.createBufferSource();
     source.buffer = audioBuffers[list];
 
+    // Instead of using the built-in loop property which can cause stuttering,
+    // we'll manually loop by scheduling the next buffer before this one ends
+    source.loop = false;
+
     // Get the gain node for this track
-    const gainNode = currentlyPlaying[list].gainNode;
+    let gainNode;
+    if (currentlyPlaying[list].gainNode) {
+      gainNode = currentlyPlaying[list].gainNode;
+      gainNode.gain.cancelScheduledValues(context.currentTime);
+      gainNode.gain.setValueAtTime(
+        isMuted[list] ? 0 : currentlyPlaying[list].volume,
+        context.currentTime
+      );
+    } else {
+      gainNode = context.createGain();
+      gainNode.gain.value = isMuted[list] ? 0 : currentlyPlaying[list].volume;
+    }
 
     // Connect the source to the audio chain
     if (eqSettings[list].bass) {
@@ -1372,44 +1439,43 @@ function scheduleNextLoop(list, startTime) {
       source.connect(gainNode);
     }
 
-    // Make sure gain node is connected to outputs
+    // Connect gain node to outputs
     gainNode.connect(masterAnalyser || context.destination);
     gainNode.connect(masterGainNode);
 
-    // Start the source slightly before the calculated time (pre-buffer)
-    // This helps eliminate the gap between loops
-    const preBufferTime = 0.02; // 20ms pre-buffer
-    source.start(startTime - preBufferTime);
-
-    console.log(`Scheduled loop for ${list} at time ${startTime}`);
+    // Start the source exactly at the calculated time
+    source.start(startTime, 0);
+    console.log(`Scheduled loop for ${list} at time ${startTime.toFixed(3)}`);
 
     // Store as current source for this track
-    const previousSource = currentlyPlaying[list].source;
     currentlyPlaying[list].source = source;
+    currentlyPlaying[list].gainNode = gainNode;
 
-    // Implement crossfade between loop iterations to avoid stuttering
-    if (previousSource) {
-      // Create a temporary gain node for the old source
-      const oldGainNode = context.createGain();
+    // Calculate precisely when this buffer will end
+    const bufferDuration = source.buffer.duration;
+    const nextLoopStartTime = startTime + bufferDuration - LOOP_OVERLAP;
 
-      // Disconnect previous source from its current destination
-      try {
-        previousSource.disconnect();
-        // Reconnect through the temporary gain node
-        previousSource.connect(oldGainNode);
-        oldGainNode.connect(masterGainNode);
-
-        // Schedule a fade out for the previous source
-        const fadeOutDuration = CROSSFADE_DURATION * 2; // Slightly longer crossfade for smooth transition
-        oldGainNode.gain.setValueAtTime(1.0, startTime - fadeOutDuration);
-        oldGainNode.gain.linearRampToValueAtTime(0.0, startTime + 0.05);
-
-        // Schedule the previous source to stop after fade out
-        previousSource.stop(startTime + 0.1);
-      } catch (e) {
-        console.log("Error during crossfade:", e);
+    // Schedule the next iteration before this one ends to create seamless playback
+    setTimeout(() => {
+      // Only schedule next loop if this source is still active
+      if (currentlyPlaying[list].source === source) {
+        scheduleNextLoop(list, nextLoopStartTime);
       }
-    }
+    }, (nextLoopStartTime - context.currentTime - 0.1) * 1000);
+
+    // Add error monitoring for unexpected endings
+    source.onended = (event) => {
+      // Only handle unexpected endings
+      if (currentlyPlaying[list].source === source) {
+        console.log(`Source for ${list} ended unexpectedly, restarting`);
+        setTimeout(() => {
+          if (currentlyPlaying[list].source === source) {
+            currentlyPlaying[list].source = null;
+            playAudio(list);
+          }
+        }, 100);
+      }
+    };
   } catch (error) {
     console.error("Error scheduling next loop:", error);
   }
@@ -1463,4 +1529,13 @@ function checkForSilence(buffer) {
       "Detected silence at the end of the audio buffer. This may affect sync."
     );
   }
+
+  return { startSilence, endSilence };
+}
+
+// Add a new function that can modify the context playback rate slightly if needed
+function tunePlaybackRate() {
+  // This can be used to fine-tune the playback if we're having sync issues
+  // For now, we're not changing the playback rate, but this is a hook for future tuning
+  return 1.0; // Default playback rate
 }
